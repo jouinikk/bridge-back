@@ -1,4 +1,4 @@
-package com.example.cars.Models;
+package com.example.cars.Models.Cour;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

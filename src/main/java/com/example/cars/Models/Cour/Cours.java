@@ -1,4 +1,4 @@
-package com.example.cars.Models;
+package com.example.cars.Models.Cour;
 
 import jakarta.persistence.*;
 import lombok.Getter;
