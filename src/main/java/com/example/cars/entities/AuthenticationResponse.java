@@ -1,4 +1,4 @@
-package com.example.cars.Auth;
+package com.example.cars.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

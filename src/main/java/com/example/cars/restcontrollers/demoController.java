@@ -1,4 +1,4 @@
-package com.example.cars.demo;
+package com.example.cars.restcontrollers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

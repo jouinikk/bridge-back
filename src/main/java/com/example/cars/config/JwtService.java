@@ -1,6 +1,6 @@
 package com.example.cars.config;
 
-import com.example.cars.user.User;
+import com.example.cars.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

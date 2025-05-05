@@ -1,5 +1,7 @@
-package com.example.cars.Models.Cour;
+package com.example.cars.restcontrollers;
 
+import com.example.cars.services.CoursService;
+import com.example.cars.entities.Cours;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

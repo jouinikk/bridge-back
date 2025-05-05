@@ -1,4 +1,4 @@
-package com.example.cars.Auth;
+package com.example.cars.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequest {
-
+public class RegisterRequest {
+    private String name;
     private String email;
     private String password;
-
 }

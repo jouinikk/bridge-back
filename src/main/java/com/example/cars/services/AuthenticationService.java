@@ -1,9 +1,8 @@
-package com.example.cars.Auth;
+package com.example.cars.services;
 
 import com.example.cars.config.JwtService;
-import com.example.cars.user.Role;
-import com.example.cars.user.User;
-import com.example.cars.user.UserRepository;
+import com.example.cars.entities.*;
+import com.example.cars.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,4 +1,4 @@
-package com.example.cars.user;
+package com.example.cars.entities;
 
 public enum Role {
     USER,

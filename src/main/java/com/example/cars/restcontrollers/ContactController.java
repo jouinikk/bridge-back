@@ -1,5 +1,7 @@
-package com.example.cars.Models.Contact;
+package com.example.cars.restcontrollers;
 
+import com.example.cars.entities.Contact;
+import com.example.cars.services.ContactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

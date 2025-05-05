@@ -1,22 +1,22 @@
-package com.example.cars.Models.Contact;
+package com.example.cars.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Entity
+@Table
 @RequiredArgsConstructor
+@Entity
 @Getter
 @Setter
-@Table
-public class Contact {
+public class Cours {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private String title;
+    private String imageUrl;
+    private float price;
 
-    private String name;
-    private String email;
-    private String message;
 }

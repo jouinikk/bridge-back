@@ -1,5 +1,9 @@
-package com.example.cars.Auth;
+package com.example.cars.restcontrollers;
 
+import com.example.cars.entities.AuthenticationRequest;
+import com.example.cars.entities.AuthenticationResponse;
+import com.example.cars.services.AuthenticationService;
+import com.example.cars.entities.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

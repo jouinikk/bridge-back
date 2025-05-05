@@ -1,15 +1,12 @@
-package com.example.cars.user;
+package com.example.cars.services;
 
+import com.example.cars.Repositories.UserRepository;
+import com.example.cars.entities.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

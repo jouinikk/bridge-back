@@ -1,5 +1,7 @@
-package com.example.cars.Models.Cour;
+package com.example.cars.services;
 
+import com.example.cars.Repositories.CourRepository;
+import com.example.cars.entities.Cours;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

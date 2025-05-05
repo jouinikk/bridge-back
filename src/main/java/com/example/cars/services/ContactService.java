@@ -1,5 +1,7 @@
-package com.example.cars.Models.Contact;
+package com.example.cars.services;
 
+import com.example.cars.entities.Contact;
+import com.example.cars.Repositories.ContactRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
