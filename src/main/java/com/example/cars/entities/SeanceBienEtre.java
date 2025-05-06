@@ -1,9 +1,9 @@
 package com.example.cars.entities;
-
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -13,20 +13,20 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Nageur {
+public class SeanceBienEtre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nom;
-    private int age;
-    private String sexe;
-    @OneToMany(mappedBy = "nageur")
-    private List<EvaluationSante> evaluations;
 
-    @OneToMany(mappedBy = "nageur")
+    private Date date;
+
+    private int capacite;
+
+    @Enumerated(EnumType.STRING)
+    private TypeSeance type;
+    @OneToMany(mappedBy = "seanceBienEtre")
     private List<Reservation> reservations;
-
-    // Getters/Setters
 }

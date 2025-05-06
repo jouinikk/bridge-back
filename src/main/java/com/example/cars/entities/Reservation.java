@@ -1,10 +1,9 @@
 package com.example.cars.entities;
-
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
+import java.util.Date;
 
 
 @Entity
@@ -15,18 +14,18 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Nageur {
+public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nom;
-    private int age;
-    private String sexe;
-    @OneToMany(mappedBy = "nageur")
-    private List<EvaluationSante> evaluations;
 
-    @OneToMany(mappedBy = "nageur")
-    private List<Reservation> reservations;
+    @ManyToOne
+    @JoinColumn(name = "nageur_id", referencedColumnName = "id")
+    private Nageur nageur;
 
-    // Getters/Setters
+    @ManyToOne
+    @JoinColumn(name = "seance_bien_etre_id", referencedColumnName = "id")
+    private SeanceBienEtre seanceBienEtre;
+
+    private Date dateReservation;
 }

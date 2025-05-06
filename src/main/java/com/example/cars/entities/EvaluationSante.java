@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
-
+import java.util.Date;
 
 @Entity
 @Getter
@@ -13,20 +12,19 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Nageur {
+public class EvaluationSante {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nom;
-    private int age;
-    private String sexe;
-    @OneToMany(mappedBy = "nageur")
-    private List<EvaluationSante> evaluations;
 
-    @OneToMany(mappedBy = "nageur")
-    private List<Reservation> reservations;
+    private Date date;
+    private int niveauStress;
+    private int motivation;
+    @ManyToOne
+    @JoinColumn(name = "nageur_id")
+    private Nageur nageur;
 
-    // Getters/Setters
 }
