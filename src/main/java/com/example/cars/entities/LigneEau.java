@@ -14,17 +14,18 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Nageur {
+public class LigneEau {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    private String nom;
-    private String prenom;
-    private String email;
-    private String telephone;
-    private String niveau; // Beginner, Intermediate, Advanced, etc.
+    private String numero; // Identification of the swimming lane
+    private String description;
     
-    @ManyToMany(mappedBy = "nageurs")
-    private List<Groupe> groupes;
+    @ManyToOne
+    @JoinColumn(name = "piscine_id")
+    private Piscine piscine;
+    
+    @OneToMany(mappedBy = "ligneEau")
+    private List<Seance> seances;
 }

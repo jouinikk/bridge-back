@@ -14,17 +14,27 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Nageur {
+public class Groupe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     private String nom;
-    private String prenom;
-    private String email;
-    private String telephone;
     private String niveau; // Beginner, Intermediate, Advanced, etc.
+    private int nombreMaxNageurs;
     
-    @ManyToMany(mappedBy = "nageurs")
-    private List<Groupe> groupes;
+    @ManyToOne
+    @JoinColumn(name = "coach_id")
+    private Coach coach;
+    
+    @ManyToMany
+    @JoinTable(
+        name = "groupe_nageur",
+        joinColumns = @JoinColumn(name = "groupe_id"),
+        inverseJoinColumns = @JoinColumn(name = "nageur_id")
+    )
+    private List<Nageur> nageurs;
+    
+    @OneToMany(mappedBy = "groupe")
+    private List<Seance> seances;
 }

@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Nageur {
+public class Coach {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,8 +23,12 @@ public class Nageur {
     private String prenom;
     private String email;
     private String telephone;
-    private String niveau; // Beginner, Intermediate, Advanced, etc.
+    private String specialite; // Butterfly, freestyle, etc.
+    private int anneeExperience;
     
-    @ManyToMany(mappedBy = "nageurs")
+    @OneToMany(mappedBy = "coach")
     private List<Groupe> groupes;
+    
+    @OneToMany(mappedBy = "coach")
+    private List<Seance> seances;
 }
