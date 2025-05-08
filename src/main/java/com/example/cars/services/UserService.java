@@ -22,4 +22,7 @@ public class UserService {
         return  userRepository.findById(id).get();
     }
 
+    public User getNageurs(){
+        return userRepository.findAll().stream().filter(user -> user.getRole().equals("NAGEURS")).findFirst().get();
+    }
 }
