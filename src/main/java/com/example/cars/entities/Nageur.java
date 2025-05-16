@@ -1,5 +1,6 @@
 package com.example.cars.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -25,6 +26,7 @@ public class Nageur {
     private String telephone;
     private String niveau; // Beginner, Intermediate, Advanced, etc.
     
+    @JsonIgnoreProperties("nageurs")
     @ManyToMany(mappedBy = "nageurs")
     private List<Groupe> groupes;
 }

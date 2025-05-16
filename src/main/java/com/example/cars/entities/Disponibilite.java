@@ -1,5 +1,6 @@
 package com.example.cars.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -26,10 +27,12 @@ public class Disponibilite {
     private LocalTime heureOuverture;
     private LocalTime heureFermeture;
     
+    @JsonIgnoreProperties("lignesEau")
     @ManyToOne
     @JoinColumn(name = "piscine_id")
     private Piscine piscine;
     
+    @JsonIgnoreProperties({"piscine", "seances"})
     @ManyToOne
     @JoinColumn(name = "ligne_eau_id")
     private LigneEau ligneEau;

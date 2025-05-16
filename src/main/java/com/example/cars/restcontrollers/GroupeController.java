@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/groupes")
+@RequestMapping("/api/v1/groupes")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class GroupeController {

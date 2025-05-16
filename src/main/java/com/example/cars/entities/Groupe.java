@@ -1,5 +1,6 @@
 package com.example.cars.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -23,10 +24,12 @@ public class Groupe {
     private String niveau; // Beginner, Intermediate, Advanced, etc.
     private int nombreMaxNageurs;
     
+    @JsonIgnoreProperties({"groupes", "seances"})
     @ManyToOne
     @JoinColumn(name = "coach_id")
     private Coach coach;
     
+    @JsonIgnoreProperties("groupes")
     @ManyToMany
     @JoinTable(
         name = "groupe_nageur",
@@ -35,6 +38,7 @@ public class Groupe {
     )
     private List<Nageur> nageurs;
     
+    @JsonIgnoreProperties({"groupe", "coach"})
     @OneToMany(mappedBy = "groupe")
     private List<Seance> seances;
 }

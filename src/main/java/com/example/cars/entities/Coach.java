@@ -1,5 +1,6 @@
 package com.example.cars.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -26,9 +27,11 @@ public class Coach {
     private String specialite; // Butterfly, freestyle, etc.
     private int anneeExperience;
     
+    @JsonIgnoreProperties({"coach", "nageurs", "seances"})
     @OneToMany(mappedBy = "coach")
     private List<Groupe> groupes;
     
+    @JsonIgnoreProperties({"coach", "groupe"})
     @OneToMany(mappedBy = "coach")
     private List<Seance> seances;
 }

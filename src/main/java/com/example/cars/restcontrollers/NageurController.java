@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/nageurs")
+@RequestMapping("/api/v1/nageurs")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class NageurController {

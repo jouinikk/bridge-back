@@ -1,5 +1,6 @@
 package com.example.cars.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -26,10 +27,12 @@ public class Seance {
     private String objectifs;
     private String typeEntrainement; // Endurance, sprint, technique, etc.
     
+    @JsonIgnoreProperties({"groupes", "seances"})
     @ManyToOne
     @JoinColumn(name = "coach_id")
     private Coach coach;
     
+    @JsonIgnoreProperties({"seances", "nageurs"})
     @ManyToOne
     @JoinColumn(name = "groupe_id")
     private Groupe groupe;

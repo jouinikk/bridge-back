@@ -1,5 +1,6 @@
 package com.example.cars.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -32,6 +33,7 @@ public class Piscine {
     private double latitude;
     private double longitude;
     
+    @JsonIgnoreProperties("piscine")
     @OneToMany(mappedBy = "piscine")
     private List<LigneEau> lignesEau;
     

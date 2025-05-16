@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/lignes-eau")
+@RequestMapping("/api/v1/lignes-eau")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class LigneEauController {

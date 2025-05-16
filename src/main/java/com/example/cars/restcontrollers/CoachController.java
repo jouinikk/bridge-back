@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/coaches")
+@RequestMapping("/api/v1/coaches")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class CoachController {
