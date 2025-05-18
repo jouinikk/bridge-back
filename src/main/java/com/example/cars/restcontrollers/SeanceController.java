@@ -158,8 +158,11 @@ public class SeanceController {
                 return ResponseEntity.badRequest()
                     .body("La piscine associée à la ligne d'eau est requise");
             }
+
+            // Set the piscine from ligneEau to ensure consistency
+            seance.setPiscine(seance.getLigneEau().getPiscine());
             
-            // Check coach availability (excluding this session)
+            // Check coach availability
             boolean isCoachAvailable = seanceService.isCoachAvailable(
                 seance.getCoach().getId(), 
                 seance.getDateDebut(), 
@@ -173,6 +176,13 @@ public class SeanceController {
                 seance.getDateFin()
             );
             
+            // Check pool hours
+            boolean isWithinPoolHours = seanceService.isWithinPoolHours(
+                seance.getLigneEau().getId(),
+                seance.getDateDebut(),
+                seance.getDateFin()
+            );
+            
             if (!isCoachAvailable) {
                 return ResponseEntity.badRequest()
                     .body("Le coach n'est pas disponible pendant cette période");
@@ -181,6 +191,11 @@ public class SeanceController {
             if (hasConflicts) {
                 return ResponseEntity.badRequest()
                     .body("La ligne d'eau est déjà réservée pendant cette période");
+            }
+            
+            if (!isWithinPoolHours) {
+                return ResponseEntity.badRequest()
+                    .body("La séance est en dehors des heures d'ouverture de la piscine");
             }
             
             Seance updatedSeance = seanceService.updateSeance(seance);

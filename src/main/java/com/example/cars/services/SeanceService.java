@@ -66,10 +66,19 @@ public class SeanceService implements ISeanceService {
     
     @Override
     public Seance updateSeance(Seance seance) {
+        // Debug logging
+        System.out.println("Updating seance with details:");
+        System.out.println("LigneEau ID: " + seance.getLigneEau().getId());
+        System.out.println("LigneEau Piscine: " + seance.getLigneEau().getPiscine());
+        System.out.println("Direct Piscine: " + seance.getPiscine());
+
         // Validate that LigneEau exists and belongs to a Piscine
         if (seance.getLigneEau() == null || seance.getLigneEau().getPiscine() == null) {
             throw new IllegalArgumentException("La ligne d'eau et sa piscine associée sont requises");
         }
+
+        // Ensure the piscine reference is consistent
+        seance.setPiscine(seance.getLigneEau().getPiscine());
         
         // Validate session times
         LocalDateTime dateDebut = seance.getDateDebut();
@@ -77,6 +86,12 @@ public class SeanceService implements ISeanceService {
         
         // Validate pool hours
         if (!isWithinPoolHours(seance.getLigneEau().getId(), dateDebut, dateFin)) {
+            System.out.println("Session time validation failed:");
+            System.out.println("Date début: " + dateDebut);
+            System.out.println("Date fin: " + dateFin);
+            System.out.println("Day of week: " + dateDebut.getDayOfWeek());
+            System.out.println("Time début: " + dateDebut.toLocalTime());
+            System.out.println("Time fin: " + dateFin.toLocalTime());
             throw new IllegalArgumentException("La séance est en dehors des heures d'ouverture de la piscine");
         }
         
