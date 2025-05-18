@@ -23,13 +23,13 @@ public class LigneEau {
     private String numero; // Identification of the swimming lane
     private String description;
     
-    @JsonIgnoreProperties("lignesEau")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "piscine_id")
+    @JsonIgnoreProperties({"lignesEau", "seances"})
     private Piscine piscine;
     
-    @JsonIgnoreProperties({"ligneEau", "coach", "groupe", "piscine"})
     @OneToMany(mappedBy = "ligneEau")
+    @JsonIgnoreProperties({"ligneEau", "coach", "groupe", "piscine"})
     @ToString.Exclude
     private List<Seance> seances;
 }

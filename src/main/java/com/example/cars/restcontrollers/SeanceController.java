@@ -28,11 +28,21 @@ public class SeanceController {
                 return ResponseEntity.badRequest()
                     .body("Une ligne d'eau est requise");
             }
-            
+
+            // Ensure piscine reference is properly set
             if (seance.getLigneEau().getPiscine() == null) {
                 return ResponseEntity.badRequest()
                     .body("La piscine associée à la ligne d'eau est requise");
             }
+
+            // Set the piscine from ligneEau to ensure consistency
+            seance.setPiscine(seance.getLigneEau().getPiscine());
+
+            // Debug logging
+            System.out.println("Creating seance with details:");
+            System.out.println("LigneEau ID: " + seance.getLigneEau().getId());
+            System.out.println("LigneEau Piscine: " + seance.getLigneEau().getPiscine());
+            System.out.println("Direct Piscine: " + seance.getPiscine());
 
             // Check coach availability
             boolean isCoachAvailable = seanceService.isCoachAvailable(

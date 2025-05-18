@@ -21,15 +21,24 @@ public class SeanceService implements ISeanceService {
     
     @Override
     public Seance addSeance(Seance seance) {
+        // Debug logging
+        System.out.println("Adding seance with details:");
+        System.out.println("LigneEau ID: " + seance.getLigneEau().getId());
+        System.out.println("LigneEau Piscine: " + seance.getLigneEau().getPiscine());
+        System.out.println("Direct Piscine: " + seance.getPiscine());
+
         // Validate that LigneEau exists and belongs to a Piscine
         if (seance.getLigneEau() == null || seance.getLigneEau().getPiscine() == null) {
             throw new IllegalArgumentException("La ligne d'eau et sa piscine associée sont requises");
         }
-        
+
+        // Ensure the piscine reference is consistent
+        seance.setPiscine(seance.getLigneEau().getPiscine());
+
         // Validate session times
         LocalDateTime dateDebut = seance.getDateDebut();
         LocalDateTime dateFin = seance.getDateFin();
-        
+
         // Validate pool hours
         if (!isWithinPoolHours(seance.getLigneEau().getId(), dateDebut, dateFin)) {
             System.out.println("Session time validation failed:");
@@ -40,7 +49,8 @@ public class SeanceService implements ISeanceService {
             System.out.println("Time fin: " + dateFin.toLocalTime());
             throw new IllegalArgumentException("La séance est en dehors des heures d'ouverture de la piscine");
         }
-        
+
+        // Save and return the seance
         return seanceRepository.save(seance);
     }
     

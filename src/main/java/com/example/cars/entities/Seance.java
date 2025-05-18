@@ -27,33 +27,33 @@ public class Seance {
     private String objectifs;
     private String typeEntrainement; // Endurance, sprint, technique, etc.
     
-    @JsonIgnoreProperties({"groupes", "seances"})
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "coach_id")
+    @JsonIgnoreProperties({"groupes", "seances"})
     private Coach coach;
     
-    @JsonIgnoreProperties({"seances", "nageurs", "coach"})
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "groupe_id")
+    @JsonIgnoreProperties({"seances", "nageurs", "coach"})
     private Groupe groupe;
     
-    @JsonIgnoreProperties({"seances", "piscine"})
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ligne_eau_id")
+    @JsonIgnoreProperties({"seances"})
     private LigneEau ligneEau;
     
-    @JsonIgnoreProperties({"lignesEau", "seances"})
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "piscine_id")
+    @JsonIgnoreProperties({"lignesEau", "seances"})
     private Piscine piscine;
     
-    // Status of the session
     @Enumerated(EnumType.STRING)
     private StatutSeance statut;
     
     private Integer nombreMaxParticipants;
     private String niveau; // Beginner, Intermediate, Advanced
     
+    @Builder.Default
     private boolean estDisponible = true;
     
     public enum StatutSeance {
