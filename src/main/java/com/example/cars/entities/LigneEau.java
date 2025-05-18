@@ -28,7 +28,8 @@ public class LigneEau {
     @JoinColumn(name = "piscine_id")
     private Piscine piscine;
     
-    @JsonIgnoreProperties({"ligneEau", "coach", "groupe"})
+    @JsonIgnoreProperties({"ligneEau", "coach", "groupe", "piscine"})
     @OneToMany(mappedBy = "ligneEau")
+    @ToString.Exclude
     private List<Seance> seances;
 }

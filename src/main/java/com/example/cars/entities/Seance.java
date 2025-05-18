@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"coach", "groupe", "ligneEau", "piscine"}) // Exclude complex objects from toString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -32,15 +32,17 @@ public class Seance {
     @JoinColumn(name = "coach_id")
     private Coach coach;
     
-    @JsonIgnoreProperties({"seances", "nageurs"})
+    @JsonIgnoreProperties({"seances", "nageurs", "coach"})
     @ManyToOne
     @JoinColumn(name = "groupe_id")
     private Groupe groupe;
     
+    @JsonIgnoreProperties({"seances", "piscine"})
     @ManyToOne
     @JoinColumn(name = "ligne_eau_id")
     private LigneEau ligneEau;
     
+    @JsonIgnoreProperties({"lignesEau", "seances"})
     @ManyToOne
     @JoinColumn(name = "piscine_id")
     private Piscine piscine;

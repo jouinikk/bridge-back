@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString
+@ToString // Exclude complex objects from toString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -33,9 +33,8 @@ public class Piscine {
     private double latitude;
     private double longitude;
     
-    @JsonIgnoreProperties("piscine")
+    @JsonIgnoreProperties({"piscine", "seances"})
     @OneToMany(mappedBy = "piscine")
+    @ToString.Exclude
     private List<LigneEau> lignesEau;
-    
-    // Relationship with other entities can be added as needed
 }

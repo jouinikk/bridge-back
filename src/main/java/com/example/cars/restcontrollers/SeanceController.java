@@ -1,6 +1,8 @@
 package com.example.cars.restcontrollers;
 
+import com.example.cars.dto.SeanceDTO;
 import com.example.cars.entities.Seance;
+import com.example.cars.mappers.SeanceMapper;
 import com.example.cars.services.SeanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.List;
 public class SeanceController {
     
     private final SeanceService seanceService;
+    private final SeanceMapper seanceMapper;
     
     @PostMapping
     public ResponseEntity<?> createSeance(@RequestBody Seance seance) {
@@ -67,55 +70,64 @@ public class SeanceController {
                     .body("La séance est en dehors des heures d'ouverture de la piscine");
             }
             
-            return ResponseEntity.ok(seanceService.addSeance(seance));
+            Seance savedSeance = seanceService.addSeance(seance);
+            return ResponseEntity.ok(seanceMapper.toDTO(savedSeance));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
-                .body("Une erreur est survenue lors de la création de la séance");
+                .body("Une erreur est survenue lors de la création de la séance: " + e.getMessage());
         }
     }
     
     @GetMapping
-    public List<Seance> getAllSeances() {
-        return seanceService.getAllSeances();
+    public ResponseEntity<List<SeanceDTO>> getAllSeances() {
+        List<Seance> seances = seanceService.getAllSeances();
+        return ResponseEntity.ok(seanceMapper.toDTOList(seances));
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<Seance> getSeanceById(@PathVariable Long id) {
+    public ResponseEntity<SeanceDTO> getSeanceById(@PathVariable Long id) {
         Seance seance = seanceService.getSeanceById(id);
-        return seance != null ? ResponseEntity.ok(seance) : ResponseEntity.notFound().build();
+        return seance != null ? 
+            ResponseEntity.ok(seanceMapper.toDTO(seance)) : 
+            ResponseEntity.notFound().build();
     }
     
     @GetMapping("/coach/{coachId}")
-    public List<Seance> getSeancesByCoach(@PathVariable Long coachId) {
-        return seanceService.getSeancesByCoachId(coachId);
+    public ResponseEntity<List<SeanceDTO>> getSeancesByCoach(@PathVariable Long coachId) {
+        List<Seance> seances = seanceService.getSeancesByCoachId(coachId);
+        return ResponseEntity.ok(seanceMapper.toDTOList(seances));
     }
     
     @GetMapping("/groupe/{groupeId}")
-    public List<Seance> getSeancesByGroupe(@PathVariable Long groupeId) {
-        return seanceService.getSeancesByGroupeId(groupeId);
+    public ResponseEntity<List<SeanceDTO>> getSeancesByGroupe(@PathVariable Long groupeId) {
+        List<Seance> seances = seanceService.getSeancesByGroupeId(groupeId);
+        return ResponseEntity.ok(seanceMapper.toDTOList(seances));
     }
     
     @GetMapping("/ligne-eau/{ligneEauId}")
-    public List<Seance> getSeancesByLigneEau(@PathVariable Long ligneEauId) {
-        return seanceService.getSeancesByLigneEauId(ligneEauId);
+    public ResponseEntity<List<SeanceDTO>> getSeancesByLigneEau(@PathVariable Long ligneEauId) {
+        List<Seance> seances = seanceService.getSeancesByLigneEauId(ligneEauId);
+        return ResponseEntity.ok(seanceMapper.toDTOList(seances));
     }
     
     @GetMapping("/coach/{coachId}/date-range")
-    public List<Seance> getSeancesByCoachAndDateRange(
+    public ResponseEntity<List<SeanceDTO>> getSeancesByCoachAndDateRange(
             @PathVariable Long coachId,
             @RequestParam LocalDateTime debut,
             @RequestParam LocalDateTime fin) {
-        return seanceService.getSeancesByCoachAndDateRange(coachId, debut, fin);
+        List<Seance> seances = seanceService.getSeancesByCoachAndDateRange(coachId, debut, fin);
+        return ResponseEntity.ok(seanceMapper.toDTOList(seances));
     }
     
     @GetMapping("/ligne-eau/{ligneEauId}/date-range")
-    public List<Seance> getSeancesByLigneEauAndDateRange(
+    public ResponseEntity<List<SeanceDTO>> getSeancesByLigneEauAndDateRange(
             @PathVariable Long ligneEauId,
             @RequestParam LocalDateTime debut,
             @RequestParam LocalDateTime fin) {
-        return seanceService.getSeancesByLigneEauAndDateRange(ligneEauId, debut, fin);
+        List<Seance> seances = seanceService.getSeancesByLigneEauAndDateRange(ligneEauId, debut, fin);
+        return ResponseEntity.ok(seanceMapper.toDTOList(seances));
     }
     
     @PutMapping("/{id}")
@@ -137,14 +149,14 @@ public class SeanceController {
                     .body("La piscine associée à la ligne d'eau est requise");
             }
             
-            // Check coach availability
+            // Check coach availability (excluding this session)
             boolean isCoachAvailable = seanceService.isCoachAvailable(
                 seance.getCoach().getId(), 
                 seance.getDateDebut(), 
                 seance.getDateFin()
             );
             
-            // Check for conflicts
+            // Check for conflicts (excluding this session)
             boolean hasConflicts = seanceService.hasConflictingSeances(
                 seance.getLigneEau().getId(),
                 seance.getDateDebut(),
@@ -161,12 +173,13 @@ public class SeanceController {
                     .body("La ligne d'eau est déjà réservée pendant cette période");
             }
             
-            return ResponseEntity.ok(seanceService.updateSeance(seance));
+            Seance updatedSeance = seanceService.updateSeance(seance);
+            return ResponseEntity.ok(seanceMapper.toDTO(updatedSeance));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
-                .body("Une erreur est survenue lors de la mise à jour de la séance");
+                .body("Une erreur est survenue lors de la mise à jour de la séance: " + e.getMessage());
         }
     }
     
