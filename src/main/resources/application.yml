@@ -14,3 +14,23 @@ spring:
       hibernate:
         format_sql: true
     database: mysql
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: maissa.hermessi2@gmail.com
+    password: grqt rxbl cfje jgch
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+    default-encoding: UTF-8
+twilio:
+  account:
+    sid: ACa6c21da617774c8503c9262ff451040f
+  auth:
+    token: 4540b1aa833a91e70dc7d8c9073de154
+  phone:
+    number: +17015435365
