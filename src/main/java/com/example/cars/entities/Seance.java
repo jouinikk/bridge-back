@@ -41,9 +41,18 @@ public class Seance {
     @JoinColumn(name = "ligne_eau_id")
     private LigneEau ligneEau;
     
+    @ManyToOne
+    @JoinColumn(name = "piscine_id")
+    private Piscine piscine;
+    
     // Status of the session
     @Enumerated(EnumType.STRING)
     private StatutSeance statut;
+    
+    private Integer nombreMaxParticipants;
+    private String niveau; // Beginner, Intermediate, Advanced
+    
+    private boolean estDisponible = true;
     
     public enum StatutSeance {
         PLANIFIEE, EN_COURS, TERMINEE, ANNULEE
