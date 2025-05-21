@@ -3,6 +3,7 @@ package com.example.cars.services;
 import com.example.cars.Repositories.NotificationRepository;
 import com.example.cars.entities.Notification;
 import com.example.cars.entities.NotificationStatus;
+import com.example.cars.entities.NotificationType;
 import com.example.cars.entities.UserInfo;
 import org.springframework.stereotype.Service;
 
@@ -29,13 +30,14 @@ public class NotificationService {
     public List<Notification> getNotificationsForUser(Long userId) {
         return repo.findByUserIdOrderByCreatedAtDesc(userId);
     }
-    public List<Notification> sendNotificationToUsers(String title, String message, boolean sendEmail, boolean sendSms, List<UserInfo> users) {
+    public List<Notification> sendNotificationToUsers(String title, String message, NotificationType type, boolean sendEmail, boolean sendSms, List<UserInfo> users) {
         List<Notification> notifications = new ArrayList<>();
 
         for (UserInfo user : users) {
             Notification notif = new Notification();
             notif.setUserId(user.getUserId());
             notif.setTitle(title);
+            notif.setType(type);
             notif.setMessage(message);
             notif.setSentByEmail(sendEmail);
             notif.setSentBySms(sendSms);
@@ -63,13 +65,12 @@ public class NotificationService {
         return notifications;
     }
 
-
     public void markAsRead(Long id) {
-        Notification notif = repo.findById(id).orElseThrow();
+        Notification notif = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Notification not found"));
         notif.setStatus(NotificationStatus.READ);
         repo.save(notif);
     }
-
     public Long countUnread(Long userId) {
         return repo.countByUserIdAndStatus(userId, NotificationStatus.UNREAD);
     }

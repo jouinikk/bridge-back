@@ -4,6 +4,7 @@ import com.example.cars.Repositories.CompetitionRepository;
 import com.example.cars.entities.Competition;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +43,20 @@ public class CompetitionServiceImpl implements ICompetitionService {
     }
 
     @Override
-    public Competition edit(Competition competition) {
-        return competitionRepository.save(competition);
+    public Competition edit(Long id, Competition updated) {
+        Competition existing = competitionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Competition not found"));
+
+        existing.setNom(updated.getNom());
+        existing.setDateDebut(updated.getDateDebut());
+        existing.setDateFin(updated.getDateFin());
+        existing.setLieu(updated.getLieu());
+        existing.setDescription(updated.getDescription());
+        existing.setUrlSource(updated.getUrlSource());
+        existing.setEstActive(updated.isEstActive());
+        existing.setLastModified(LocalDateTime.now());
+        existing.setUpdatedNotificationSent(false);
+
+        return competitionRepository.save(existing);
     }
 }

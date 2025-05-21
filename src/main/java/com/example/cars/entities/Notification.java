@@ -17,6 +17,7 @@ public class Notification {
     private Long userId; // ynjm ykoun Coach or Swimmer
 
     private String title;
+    @Column(length = 2000)
     private String message;
 
     @Enumerated(EnumType.STRING)
@@ -100,5 +101,14 @@ public class Notification {
     }
     public void setSentBySms(boolean sentBySms) {
         this.sentBySms = sentBySms;
+    }
+    public Long getId() {
+        return id;
+    }
+    public NotificationType getNotificationType() {
+        return type;
+    }
+    public void setNotificationType(NotificationType type) {
+        this.type = type;
     }
 }
