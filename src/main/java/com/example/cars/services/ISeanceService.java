@@ -27,9 +27,9 @@ public interface ISeanceService {
     
     List<Seance> getSeancesByLigneEauAndDateRange(Long ligneEauId, LocalDateTime debut, LocalDateTime fin);
     
-    boolean hasConflictingSeances(Long ligneEauId, LocalDateTime dateDebut, LocalDateTime dateFin);
+    boolean hasConflictingSeances(Long ligneEauId, LocalDateTime dateDebut, LocalDateTime dateFin, Long excludeId);
     
-    boolean isCoachAvailable(Long coachId, LocalDateTime dateDebut, LocalDateTime dateFin);
+    boolean isCoachAvailable(Long coachId, LocalDateTime dateDebut, LocalDateTime dateFin, Long excludeId);
     
     boolean isWithinPoolHours(Long ligneEauId, LocalDateTime dateDebut, LocalDateTime dateFin);
 }

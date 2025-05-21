@@ -44,18 +44,20 @@ public class SeanceController {
             System.out.println("LigneEau Piscine: " + seance.getLigneEau().getPiscine());
             System.out.println("Direct Piscine: " + seance.getPiscine());
 
-            // Check coach availability
+            // Check coach availability (pass null as excludeId for new seance)
             boolean isCoachAvailable = seanceService.isCoachAvailable(
                 seance.getCoach().getId(), 
                 seance.getDateDebut(), 
-                seance.getDateFin()
+                seance.getDateFin(),
+                null
             );
             
-            // Check for conflicts
+            // Check for conflicts (pass null as excludeId for new seance)
             boolean hasConflicts = seanceService.hasConflictingSeances(
                 seance.getLigneEau().getId(),
                 seance.getDateDebut(),
-                seance.getDateFin()
+                seance.getDateFin(),
+                null
             );
             
             // Check pool hours
@@ -79,7 +81,7 @@ public class SeanceController {
                 return ResponseEntity.badRequest()
                     .body("La séance est en dehors des heures d'ouverture de la piscine");
             }
-            
+
             Seance savedSeance = seanceService.addSeance(seance);
             return ResponseEntity.ok(seanceMapper.toDTO(savedSeance));
         } catch (IllegalArgumentException e) {
@@ -162,18 +164,20 @@ public class SeanceController {
             // Set the piscine from ligneEau to ensure consistency
             seance.setPiscine(seance.getLigneEau().getPiscine());
             
-            // Check coach availability
+            // Check coach availability (pass the seance id to exclude it from conflict check)
             boolean isCoachAvailable = seanceService.isCoachAvailable(
                 seance.getCoach().getId(), 
                 seance.getDateDebut(), 
-                seance.getDateFin()
+                seance.getDateFin(),
+                seance.getId()
             );
             
-            // Check for conflicts (excluding this session)
+            // Check for conflicts (pass the seance id to exclude it from conflict check)
             boolean hasConflicts = seanceService.hasConflictingSeances(
                 seance.getLigneEau().getId(),
                 seance.getDateDebut(),
-                seance.getDateFin()
+                seance.getDateFin(),
+                seance.getId()
             );
             
             // Check pool hours

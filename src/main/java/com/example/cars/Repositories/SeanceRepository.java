@@ -23,19 +23,23 @@ public interface SeanceRepository extends JpaRepository<Seance, Long> {
     
     // Check for conflicting sessions (overlapping time) for a specific swimming lane
     @Query("SELECT s FROM Seance s WHERE s.ligneEau.id = :ligneEauId " +
+           "AND (s.id != :excludeId OR :excludeId IS NULL) " +
            "AND ((s.dateDebut <= :dateFin AND s.dateFin >= :dateDebut) " +
            "OR (s.dateDebut >= :dateDebut AND s.dateDebut <= :dateFin))")
     List<Seance> findConflictingSessionsForLigneEau(
             @Param("ligneEauId") Long ligneEauId,
             @Param("dateDebut") LocalDateTime dateDebut,
-            @Param("dateFin") LocalDateTime dateFin);
+            @Param("dateFin") LocalDateTime dateFin,
+            @Param("excludeId") Long excludeId);
     
     // Check for conflicting sessions for a specific coach
     @Query("SELECT s FROM Seance s WHERE s.coach.id = :coachId " +
+           "AND (s.id != :excludeId OR :excludeId IS NULL) " +
            "AND ((s.dateDebut <= :dateFin AND s.dateFin >= :dateDebut) " +
            "OR (s.dateDebut >= :dateDebut AND s.dateDebut <= :dateFin))")
     List<Seance> findConflictingSessionsForCoach(
             @Param("coachId") Long coachId,
             @Param("dateDebut") LocalDateTime dateDebut,
-            @Param("dateFin") LocalDateTime dateFin);
+            @Param("dateFin") LocalDateTime dateFin,
+            @Param("excludeId") Long excludeId);
 }

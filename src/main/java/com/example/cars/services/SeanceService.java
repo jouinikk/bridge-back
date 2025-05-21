@@ -34,11 +34,11 @@ public class SeanceService implements ISeanceService {
 
         // Ensure the piscine reference is consistent
         seance.setPiscine(seance.getLigneEau().getPiscine());
-
+        
         // Validate session times
         LocalDateTime dateDebut = seance.getDateDebut();
         LocalDateTime dateFin = seance.getDateFin();
-
+        
         // Validate pool hours
         if (!isWithinPoolHours(seance.getLigneEau().getId(), dateDebut, dateFin)) {
             System.out.println("Session time validation failed:");
@@ -66,17 +66,6 @@ public class SeanceService implements ISeanceService {
     
     @Override
     public Seance updateSeance(Seance seance) {
-        // Debug logging
-        System.out.println("Updating seance with details:");
-        System.out.println("LigneEau ID: " + seance.getLigneEau().getId());
-        System.out.println("LigneEau Piscine: " + seance.getLigneEau().getPiscine());
-        System.out.println("Direct Piscine: " + seance.getPiscine());
-
-        // Validate that LigneEau exists and belongs to a Piscine
-        if (seance.getLigneEau() == null || seance.getLigneEau().getPiscine() == null) {
-            throw new IllegalArgumentException("La ligne d'eau et sa piscine associée sont requises");
-        }
-
         // Ensure the piscine reference is consistent
         seance.setPiscine(seance.getLigneEau().getPiscine());
         
@@ -127,23 +116,25 @@ public class SeanceService implements ISeanceService {
     public List<Seance> getSeancesByLigneEauAndDateRange(Long ligneEauId, LocalDateTime debut, LocalDateTime fin) {
         return seanceRepository.findByLigneEauIdAndDateDebutBetween(ligneEauId, debut, fin);
     }
-    
+
     @Override
-    public boolean hasConflictingSeances(Long ligneEauId, LocalDateTime dateDebut, LocalDateTime dateFin) {
+    public boolean hasConflictingSeances(Long ligneEauId, LocalDateTime dateDebut, LocalDateTime dateFin, Long excludeId) {
         List<Seance> conflictingSeances = seanceRepository.findConflictingSessionsForLigneEau(
             ligneEauId, 
             dateDebut, 
-            dateFin
+            dateFin,
+            excludeId
         );
         return !conflictingSeances.isEmpty();
     }
     
     @Override
-    public boolean isCoachAvailable(Long coachId, LocalDateTime dateDebut, LocalDateTime dateFin) {
+    public boolean isCoachAvailable(Long coachId, LocalDateTime dateDebut, LocalDateTime dateFin, Long excludeId) {
         List<Seance> conflictingSeances = seanceRepository.findConflictingSessionsForCoach(
             coachId, 
             dateDebut, 
-            dateFin
+            dateFin,
+            excludeId
         );
         return conflictingSeances.isEmpty();
     }
