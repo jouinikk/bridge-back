@@ -1,4 +1,4 @@
-package com.example.cars.user;
+package com.example.cars.Models.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.example.cars.config;
 
-import com.example.cars.user.User;
+import com.example.cars.Models.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -42,6 +42,8 @@ public class JwtService {
             User user = (User) userDetails;
             extraClaims.put("name",user.getName());
             extraClaims.put("id",user.getId());
+            extraClaims.put("role",user.getRole().toString());
+
         }
 
     return Jwts.builder()
