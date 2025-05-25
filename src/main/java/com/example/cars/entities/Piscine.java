@@ -37,4 +37,7 @@ public class Piscine {
     @OneToMany(mappedBy = "piscine")
     @ToString.Exclude
     private List<LigneEau> lignesEau;
+    @ManyToOne
+    @JoinColumn(name = "centre_id")
+    private Centre centre;
 }
