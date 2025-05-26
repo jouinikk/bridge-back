@@ -23,6 +23,7 @@ public class EvaluationSante {
     private Date date;
     private int niveauStress;
     private int motivation;
+    private int humeur;
     @ManyToOne
     @JoinColumn(name = "nageur_id")
     private Nageur nageur;

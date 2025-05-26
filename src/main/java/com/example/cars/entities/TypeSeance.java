@@ -1,5 +1,11 @@
 package com.example.cars.entities;
 
 public enum TypeSeance {
-    YOGA, MASSAGE, MEDITATION, AUTRE
+    YOGA,
+    AQUAGYM,
+    MEDITATION,
+    AQUABIKE,
+    HAMMAM,
+    RELAXATION,
+    NATATION_DOUCE
 }

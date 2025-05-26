@@ -22,6 +22,7 @@ public class Nageur {
     private String nom;
     private int age;
     private String sexe;
+    private String email;
     @OneToMany(mappedBy = "nageur")
     private List<EvaluationSante> evaluations;
 
