@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/notifications")
-@CrossOrigin("*")
 public class NotificationController {
     private final NotificationService service;
-    private NotificationRepository notificationRepository;
+    private final NotificationRepository notificationRepository;
 
-    public NotificationController(NotificationService service) {
+    public NotificationController(NotificationService service, NotificationRepository notificationRepository) {
         this.service = service;
+        this.notificationRepository = notificationRepository;
     }
 
     @GetMapping("/user/{userId}")
@@ -49,4 +49,6 @@ public class NotificationController {
                 request.getUsers()
         );
     }
+
 }
+
