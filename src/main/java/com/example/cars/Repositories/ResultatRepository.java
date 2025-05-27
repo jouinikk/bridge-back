@@ -7,7 +7,7 @@ import java.util.List;
 public interface ResultatRepository extends JpaRepository<Resultat, Long> {
 
     Resultat findById(long id);
-    List<Resultat> findByEpreuve(String epreuve);
+    //List<Resultat> findByEpreuve(String epreuve);
     List<Resultat> findByCompetition(Competition competition);
     List<Resultat> findByNomNageurContainingIgnoreCase(String nom);
     List<Resultat> findByClub(String club);

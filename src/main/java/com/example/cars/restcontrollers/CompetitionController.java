@@ -5,6 +5,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,8 @@ public class CompetitionController {
     @ApiOperation(value = "Add a new competition", response = Competition.class)
     @PostMapping
     public Competition addCompetition(@RequestBody Competition competition) {
+        competition.setDateImportation(LocalDateTime.now());
+        competition.setLastModified(LocalDateTime.now());
         return competitionService.createCompetition(competition);
     }
 
@@ -39,9 +42,11 @@ public class CompetitionController {
 
 
     @ApiOperation(value = "Update an existing competition", response = Competition.class)
-    @PutMapping
-    public Competition updateCompetition(@RequestBody Competition competition) {
-        return competitionService.edit(competition);
+    @PutMapping("/{id}")
+    public Competition updateCompetition(@PathVariable Long id, @RequestBody Competition competition) {
+        competition.setId(id);
+        competition.setLastModified(LocalDateTime.now());
+        return competitionService.edit(id, competition);
     }
 
     @ApiOperation(value = "Delete a competition by ID")

@@ -42,12 +42,41 @@ public class Competition {
     String urlSource;
 
     @Column
-    boolean estActive;
+    private boolean estActive;
 
     @OneToMany(mappedBy = "competition", cascade = CascadeType.ALL)
     List<Resultat> resultats;
 
-    @Column
-    LocalDateTime dateImportation;
+    @Column(nullable = true)
+    private LocalDateTime dateImportation;
 
+    @Column
+    LocalDateTime lastModified;
+    @Column(nullable = false)
+    private boolean createdNotificationSent = false;
+
+    @Column(nullable = false)
+    private boolean updatedNotificationSent = false;
+
+    public boolean isEstActive() {
+        return estActive;
+    }
+
+    public void setEstActive(boolean estActive) {
+        this.estActive = estActive;
+    }
+
+    public boolean isUpdatedNotificationSent() {
+        return updatedNotificationSent;
+    }
+    public void setUpdatedNotificationSent(boolean updatedNotificationSent) {
+        this.updatedNotificationSent = updatedNotificationSent;
+    }
+
+    public boolean isCreatedNotificationSent() {
+        return createdNotificationSent;
+    }
+    public void setCreatedNotificationSent(boolean createdNotificationSent) {
+        this.createdNotificationSent = createdNotificationSent;
+    }
 }

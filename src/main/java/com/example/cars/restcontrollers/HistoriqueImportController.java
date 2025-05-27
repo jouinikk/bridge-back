@@ -1,13 +1,12 @@
 package com.example.cars.restcontrollers;
 
-import com.example.cars.entities.Competition;
 import com.example.cars.entities.HistoriqueImport;
-import com.example.cars.services.CompetitionServiceImpl;
 import com.example.cars.services.HistoriqueImportServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,37 +15,43 @@ import java.util.Optional;
 @RequestMapping("/Histo")
 public class HistoriqueImportController {
 
-    private HistoriqueImportServiceImpl historiqueImportServiceImpl;
+    private final HistoriqueImportServiceImpl historiqueImportService;
 
-    @ApiOperation(value = "Add a new historique", response = HistoriqueImport.class)
+    // Constructor injection
+    public HistoriqueImportController(HistoriqueImportServiceImpl historiqueImportService) {
+        this.historiqueImportService = historiqueImportService;
+    }
+
+    @ApiOperation(value = "Add a new historique import", response = HistoriqueImport.class)
     @PostMapping
     public HistoriqueImport addHist(@RequestBody HistoriqueImport historiqueImport) {
-        return historiqueImportServiceImpl.createHistoriqueImport(historiqueImport);
+        historiqueImport.setDateImport(LocalDateTime.now());
+        return historiqueImportService.createHistoriqueImport(historiqueImport);
     }
 
-    @ApiOperation(value = "Get all Historique", response = List.class)
+    @ApiOperation(value = "Get all Historique imports", response = List.class)
     @GetMapping
     public List<HistoriqueImport> getAllHistorique() {
-        return historiqueImportServiceImpl.getAllImports();
+        return historiqueImportService.getAllImports();
     }
 
-    @ApiOperation(value = "Get a histo import by Id", response = HistoriqueImport.class)
+    @ApiOperation(value = "Get a historique import by Id", response = HistoriqueImport.class)
     @GetMapping("/{id}")
-    public Optional<HistoriqueImport> getHistoImpoById(@PathVariable long id) {
-        return historiqueImportServiceImpl.getHistoriqueImportById(id);
+    public Optional<HistoriqueImport> getHistoImpoById(@PathVariable Long id) {
+        return historiqueImportService.getHistoriqueImportById(id);
     }
 
 
-    @ApiOperation(value = "Update an existing Histo import", response = HistoriqueImport.class)
-    @PutMapping
-    public HistoriqueImport updateHistoImport(@RequestBody HistoriqueImport historiqueImport) {
-        return historiqueImportServiceImpl.edit(historiqueImport);
+    @ApiOperation(value = "Update an existing Historique import", response = HistoriqueImport.class)
+    @PutMapping("/{id}")
+    public HistoriqueImport updateHistoImport(@PathVariable Long id, @RequestBody HistoriqueImport historiqueImport) {
+        historiqueImport.setId(id);
+        return historiqueImportService.editHistoriqueImport(id, historiqueImport);
     }
 
-    @ApiOperation(value = "Delete a histo import by ID")
+    @ApiOperation(value = "Delete a historique import by ID")
     @DeleteMapping("/{id}")
     public void deleteHistoImport(@PathVariable Long id) {
-        historiqueImportServiceImpl.deleteHistoriqueImportById(id);
+        historiqueImportService.deleteHistoriqueImportById(id);
     }
-
 }

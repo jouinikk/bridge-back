@@ -3,6 +3,7 @@ package com.example.cars.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "Resultat")
@@ -19,26 +20,38 @@ public class Resultat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(nullable = false)
+    @JsonProperty("Place")
+    String place;
+
+    @JsonProperty("Nom et prénom")
     String nomNageur;
 
-    @Column(nullable = false)
-    String epreuve;
+    @JsonProperty("Nation")
+    String nation;
 
-    @Column(nullable = false)
-    String temps;
+    @JsonProperty("Naissance")
+    String naissance;
 
-    @Column
+    @JsonProperty("Club")
     String club;
 
+    @JsonProperty("Temps")
+    String temps;
+
+    @JsonProperty("Points")
+    String points;
+
+    @JsonProperty("Temps de passage")
+    String tempsDePassage;
+
+    // You might still need to associate this Resultat with a Competition
     @ManyToOne
     @JoinColumn(name = "competition_id")
     Competition competition;
 
-    @Column
-    String categorie;
-
-    @Column
-    int rang;
-
+    // You might want to keep or remove these depending on your needs
+   // String categorie;
+   // Integer classement;
+   // Integer rang;
+   // String epreuve; // You'll likely need to determine the event from context
 }

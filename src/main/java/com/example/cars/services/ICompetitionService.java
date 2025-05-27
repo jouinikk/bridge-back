@@ -11,5 +11,5 @@ public interface ICompetitionService {
     Optional<Competition> getCompetitionById(Long id);
     List<Competition> getCompetitionsActives();
     void deleteCompetition(Long id);
-    Competition edit(Competition competition);
+    Competition edit(Long id, Competition updated);
 }
