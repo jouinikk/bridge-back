@@ -1,47 +1,27 @@
 package com.example.cars.dataImport;
 
-import com.example.cars.entities.Resultat; // Changed to Resultat
-import com.example.cars.Repositories.ResultatRepository; // Changed to ResultatRepository
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
+import java.util.Map;
 
 @Service
 public class DataImportService {
+    private final Map<String, DataImporter> importers;
 
-    private final ResultatRepository resultatRepository;
-    private final ObjectMapper objectMapper;
-
-    public DataImportService(ResultatRepository resultatRepository, ObjectMapper objectMapper) {
-        this.resultatRepository = resultatRepository;
-        this.objectMapper = objectMapper;
+    public DataImportService(CompetitionImporter competitionImporter,
+                             ResultatImporter resultatImporter) {
+        this.importers = Map.of(
+                "competition", competitionImporter,
+                "resultat", resultatImporter
+        );
     }
 
-    public void importDataFromJson(String jsonFilePath) {
-        try {
-            // Load file from classpath
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(jsonFilePath);
-            if (inputStream == null) {
-                throw new FileNotFoundException("File not found: " + jsonFilePath);
-            }
-
-            // Parse JSON
-            List<Resultat> results = objectMapper.readValue(inputStream, new TypeReference<List<Resultat>>() {});
-
-            // Save to database
-            resultatRepository.saveAll(results);
-            System.out.println("Imported " + results.size() + " records.");
-
-        } catch (Exception e) {
-            System.err.println("IMPORT FAILED: " + e.getMessage());
-            throw new RuntimeException("Import failed", e); // Re-throw to see the error in the API response
+    public void importDataFromJson(MultipartFile file, String entityName) throws Exception {
+        DataImporter importer = importers.get(entityName.toLowerCase());
+        if (importer == null) {
+            throw new IllegalArgumentException("Unsupported entity: " + entityName);
         }
+        importer.importData(file);
     }
 }

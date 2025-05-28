@@ -1,12 +1,13 @@
 package com.example.cars.dataImport;
 
-import com.example.cars.dataImport.DataImportService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 @RestController
+@RequestMapping("/api")  // Added base path
 public class DataImportController {
 
     private final DataImportService dataImportService;
@@ -15,9 +16,22 @@ public class DataImportController {
         this.dataImportService = dataImportService;
     }
 
-    @PostMapping("/import-results")
-    public ResponseEntity<String> importResults(@RequestParam String jsonFile) {
-        dataImportService.importDataFromJson(jsonFile);
-        return ResponseEntity.ok("Results import process initiated.");
+    @PostMapping(value = "/import", consumes = {"multipart/form-data"})
+    public ResponseEntity<?> importData(
+            @RequestPart("file") MultipartFile file,
+            @RequestParam("entity") String entity) {
+
+        try {
+            dataImportService.importDataFromJson(file, entity);
+            return ResponseEntity.ok().body(Map.of(
+                    "status", "success",
+                    "message", "Imported " + entity + " data"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "status", "error",
+                    "message", e.getMessage()
+            ));
+        }
     }
 }
