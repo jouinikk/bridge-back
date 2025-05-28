@@ -5,6 +5,7 @@ import com.example.cars.entities.Notification;
 import com.example.cars.entities.NotificationStatus;
 import com.example.cars.entities.NotificationType;
 import com.example.cars.entities.UserInfo;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -73,5 +74,13 @@ public class NotificationService {
     }
     public Long countUnread(Long userId) {
         return repo.countByUserIdAndStatus(userId, NotificationStatus.UNREAD);
+    }
+    @Transactional
+    public void markAllAsRead(Long userId) {
+        List<Notification> unreadNotifs = repo.findByUserIdAndStatus(userId, NotificationStatus.UNREAD);
+        for (Notification notif : unreadNotifs) {
+            notif.setStatus(NotificationStatus.READ);
+        }
+        repo.saveAll(unreadNotifs);
     }
 }

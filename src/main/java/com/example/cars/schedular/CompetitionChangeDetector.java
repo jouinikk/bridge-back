@@ -1,11 +1,13 @@
 package com.example.cars.schedular;
 
 import com.example.cars.Repositories.CompetitionRepository;
+import com.example.cars.dto.WebSocketNotification;
 import com.example.cars.entities.Competition;
 import com.example.cars.entities.NotificationType;
 import com.example.cars.entities.UserInfo;
 import com.example.cars.services.NotificationService;
 import com.example.cars.services.UserInfoService;
+import com.example.cars.services.WebSocketSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -19,16 +21,18 @@ public class CompetitionChangeDetector {
     private final CompetitionRepository competitionRepository;
     private final NotificationService notificationService;
     private final UserInfoService userInfoService;
+    private final WebSocketSender webSocketSender;
 
     // Tracks the last seen competition modification timestamps
     private final Map<Long, LocalDateTime> lastSeenCompetitions = new ConcurrentHashMap<>();
 
     public CompetitionChangeDetector(CompetitionRepository competitionRepository,
                                      NotificationService notificationService,
-                                     UserInfoService userInfoService) {
+                                     UserInfoService userInfoService, WebSocketSender webSocketSender) {
         this.competitionRepository = competitionRepository;
         this.notificationService = notificationService;
         this.userInfoService = userInfoService;
+        this.webSocketSender = webSocketSender;
     }
 
     @Scheduled(fixedRate = 60000)
@@ -44,11 +48,13 @@ public class CompetitionChangeDetector {
             if (!comp.isCreatedNotificationSent()) {
                 title = "Nouvelle compétition ajoutée";
                 notificationService.sendNotificationToUsers(title, msg, NotificationType.COMPETITION, true, false, users);
+                webSocketSender.sendToAll(new WebSocketNotification(title, msg, NotificationType.COMPETITION));
                 comp.setCreatedNotificationSent(true);
                 notify = true;
             } else if (wasUpdated(comp)) {
                 title = "Mise à jour de la compétition";
                 notificationService.sendNotificationToUsers(title, msg, NotificationType.COMPETITION, true, false, users);
+                webSocketSender.sendToAll(new WebSocketNotification(title, msg, NotificationType.COMPETITION));
                 comp.setUpdatedNotificationSent(true);
                 notify = true;
                 System.out.println("Update detected for comp " + comp.getId()

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/notifications")
@@ -48,6 +50,11 @@ public class NotificationController {
                 request.isSendSms(),
                 request.getUsers()
         );
+    }
+    @PostMapping("/mark-all-as-read")
+    public void markAllAsRead(@RequestBody Map<String, Long> body) {
+        Long userId = body.get("userId");
+        service.markAllAsRead(userId);
     }
 
 }
