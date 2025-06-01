@@ -1,4 +1,6 @@
 package com.example.cars.entities;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -21,6 +23,7 @@ public class Reservation {
     private Long id;
     private LocalDateTime dateReservation;
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "nageur_id", referencedColumnName = "id")
     private Nageur nageur;
 

@@ -11,6 +11,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/evaluations")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
+
 public class EvaluationSanteController {
 
     private final EvaluationSanteService evaluationService;

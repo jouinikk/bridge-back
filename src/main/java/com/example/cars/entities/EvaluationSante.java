@@ -1,5 +1,6 @@
 package com.example.cars.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -25,6 +26,8 @@ public class EvaluationSante {
     private int motivation;
     private int humeur;
     @ManyToOne
+    @JsonBackReference
+
     @JoinColumn(name = "nageur_id")
     private Nageur nageur;
 

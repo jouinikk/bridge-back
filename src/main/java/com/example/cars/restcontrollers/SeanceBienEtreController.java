@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/seances")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:4200"}) // Ajout CORS
+@CrossOrigin(origins = "http://localhost:4200") // Ajout CORS
 public class SeanceBienEtreController {
 
     private final SeanceBienEtreService seanceService;
@@ -31,8 +31,10 @@ public class SeanceBienEtreController {
     public ResponseEntity<List<SeanceBienEtre>> getAll() {
         try {
             List<SeanceBienEtre> seances = seanceService.getAllSeances();
+            System.out.println("Séances récupérées: " + seances); // Log des données
             return ResponseEntity.ok(seances);
         } catch (Exception e) {
+            e.printStackTrace(); // ← Ceci est crucial pour voir l'erreur réelle
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

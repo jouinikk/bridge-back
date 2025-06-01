@@ -7,5 +7,6 @@ public enum TypeSeance {
     AQUABIKE,
     HAMMAM,
     RELAXATION,
-    NATATION_DOUCE
+    NATATION_DOUCE,
+    BOXE
 }
