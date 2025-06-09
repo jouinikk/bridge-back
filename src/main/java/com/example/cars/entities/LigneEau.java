@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,8 +29,12 @@ public class LigneEau {
     @JsonIgnoreProperties({"lignesEau", "seances"})
     private Piscine piscine;
     
-    @OneToMany(mappedBy = "ligneEau")
-    @JsonIgnoreProperties({"ligneEau", "coach", "groupe", "piscine"})
+    // @OneToMany(mappedBy = "ligneEau")
+    // @JsonIgnoreProperties({"ligneEau", "coach", "groupe", "piscine"})
+    // @ToString.Exclude
+    // private List<Seance> seances;
+    @OneToMany(mappedBy = "ligneEau", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({ "ligneEau", "coach", "groupe", "piscine" })
     @ToString.Exclude
     private List<Seance> seances;
 }
