@@ -59,4 +59,10 @@ public class UserService {
     }
 
 
+    public User toggleLock(int userId) {
+        User optionalUser = userRepository.findById(userId).get();
+
+        optionalUser.setLocked(!optionalUser.isLocked());
+        return userRepository.save(optionalUser);
+    }
 }

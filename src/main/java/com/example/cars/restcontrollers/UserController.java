@@ -50,4 +50,13 @@ public class UserController {
         return userService.updatePassword(userId, request.getCurrentPassword(), request.getNewPassword(), request.getConfirmPassword());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable int id) {
+        return ResponseEntity.ok(this.userService.getUserById(id));
+    }
+
+        @PutMapping("toggleLock/{id}")
+    public ResponseEntity<User> toggleLock(@PathVariable int id) {
+        return ResponseEntity.ok(this.userService.toggleLock(id));
+    }
 }
