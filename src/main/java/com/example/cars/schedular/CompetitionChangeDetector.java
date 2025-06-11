@@ -4,9 +4,11 @@ import com.example.cars.Repositories.CompetitionRepository;
 import com.example.cars.dto.WebSocketNotification;
 import com.example.cars.entities.Competition;
 import com.example.cars.entities.NotificationType;
+import com.example.cars.entities.User;
 import com.example.cars.entities.UserInfo;
 import com.example.cars.services.NotificationService;
 import com.example.cars.services.UserInfoService;
+import com.example.cars.services.UserService;
 import com.example.cars.services.WebSocketSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -20,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CompetitionChangeDetector {
     private final CompetitionRepository competitionRepository;
     private final NotificationService notificationService;
-    private final UserInfoService userInfoService;
+    private final UserService userService;
     private final WebSocketSender webSocketSender;
 
     // Tracks the last seen competition modification timestamps
@@ -28,17 +30,17 @@ public class CompetitionChangeDetector {
 
     public CompetitionChangeDetector(CompetitionRepository competitionRepository,
                                      NotificationService notificationService,
-                                     UserInfoService userInfoService, WebSocketSender webSocketSender) {
+                                     UserService userService, WebSocketSender webSocketSender) {
         this.competitionRepository = competitionRepository;
         this.notificationService = notificationService;
-        this.userInfoService = userInfoService;
+        this.userService = userService;
         this.webSocketSender = webSocketSender;
     }
 
     @Scheduled(fixedRate = 60000)
     public void detectChangesInCompetitions() {
         List<Competition> competitions = competitionRepository.findAll();
-        List<UserInfo> users = userInfoService.getAllUserInfos();
+        List<User> users = userService.getAllUsers();
 
         for (Competition comp : competitions) {
             boolean notify = false;
@@ -47,7 +49,7 @@ public class CompetitionChangeDetector {
 
             if (!comp.isCreatedNotificationSent()) {
                 title = "Nouvelle compétition ajoutée";
-                notificationService.sendNotificationToUsers(title, msg, NotificationType.COMPETITION, true, false, users);
+                notificationService.sendNotificationToUsers(title, msg, NotificationType.COMPETITION, true, true, users);
                 webSocketSender.sendToAll(new WebSocketNotification(title, msg, NotificationType.COMPETITION));
                 comp.setCreatedNotificationSent(true);
                 notify = true;

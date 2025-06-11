@@ -14,8 +14,6 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId; // ynjm ykoun Coach or Swimmer
-
     private String title;
     @Column(length = 2000)
     private String message;
@@ -40,14 +38,6 @@ public class Notification {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public String getTitle() {
@@ -111,4 +101,7 @@ public class Notification {
     public void setNotificationType(NotificationType type) {
         this.type = type;
     }
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

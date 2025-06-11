@@ -8,6 +8,4 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000/")
 public class UserController {
-
-
 }

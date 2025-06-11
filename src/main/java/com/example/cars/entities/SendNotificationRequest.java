@@ -7,8 +7,8 @@ public class SendNotificationRequest {
     private String message;
     private boolean sendEmail;
     private boolean sendSms;
-    private List<UserInfo> users;
     private NotificationType type;
+    private List<Integer> userIds;
 
     public String getTitle() {
         return title;
@@ -34,16 +34,13 @@ public class SendNotificationRequest {
     public void setSendSms(boolean sendSms) {
         this.sendSms = sendSms;
     }
-    public List<UserInfo> getUsers() {
-        return users;
-    }
-    public void setUsers(List<UserInfo> users) {
-        this.users = users;
-    }
     public NotificationType getType() {
         return type;
     }
     public void setType(NotificationType type) {
         this.type = type;
+    }
+    public List<Integer> getUserIds() {
+        return userIds;
     }
 }

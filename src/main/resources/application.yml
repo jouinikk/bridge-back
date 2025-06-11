@@ -29,10 +29,10 @@ spring:
     default-encoding: UTF-8
 twilio:
   account:
-    sid: ACa6c21da617774c8503c9262ff451040f
+    sid: AC9eabe8927720dc4d0ef30aea4977993b
   auth:
-    token: 4540b1aa833a91e70dc7d8c9073de154
+    token: 8b7d06b4a684fb05108101cf4f497d70
   phone:
-    number: +17015435365
+    number: +16085085729
 
 

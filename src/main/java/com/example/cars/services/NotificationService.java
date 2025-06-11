@@ -1,10 +1,7 @@
 package com.example.cars.services;
 
 import com.example.cars.Repositories.NotificationRepository;
-import com.example.cars.entities.Notification;
-import com.example.cars.entities.NotificationStatus;
-import com.example.cars.entities.NotificationType;
-import com.example.cars.entities.UserInfo;
+import com.example.cars.entities.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -28,15 +25,15 @@ public class NotificationService {
         notif.setCreatedAt(LocalDateTime.now());
         return repo.save(notif);
     }
-    public List<Notification> getNotificationsForUser(Long userId) {
-        return repo.findByUserIdOrderByCreatedAtDesc(userId);
+    public List<Notification> getNotificationsForUser(User user) {
+        return repo.findByUserIdOrderByCreatedAtDesc(user);
     }
-    public List<Notification> sendNotificationToUsers(String title, String message, NotificationType type, boolean sendEmail, boolean sendSms, List<UserInfo> users) {
+    public List<Notification> sendNotificationToUsers(String title, String message, NotificationType type, boolean sendEmail, boolean sendSms, List<User> users) {
         List<Notification> notifications = new ArrayList<>();
 
-        for (UserInfo user : users) {
+        for (User user : users) {
             Notification notif = new Notification();
-            notif.setUserId(user.getUserId());
+            notif.setUser(user);
             notif.setTitle(title);
             notif.setType(type);
             notif.setMessage(message);
@@ -72,12 +69,12 @@ public class NotificationService {
         notif.setStatus(NotificationStatus.READ);
         repo.save(notif);
     }
-    public Long countUnread(Long userId) {
-        return repo.countByUserIdAndStatus(userId, NotificationStatus.UNREAD);
+    public Long countUnread(User user) {
+        return repo.countByUserIdAndStatus(user, NotificationStatus.UNREAD);
     }
     @Transactional
-    public void markAllAsRead(Long userId) {
-        List<Notification> unreadNotifs = repo.findByUserIdAndStatus(userId, NotificationStatus.UNREAD);
+    public void markAllAsRead(User user) {
+        List<Notification> unreadNotifs = repo.findByUserIdAndStatus(user, NotificationStatus.UNREAD);
         for (Notification notif : unreadNotifs) {
             notif.setStatus(NotificationStatus.READ);
         }

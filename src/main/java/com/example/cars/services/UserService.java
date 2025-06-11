@@ -21,5 +21,7 @@ public class UserService {
     public User getUserById(int id) throws NoSuchElementException {
         return  userRepository.findById(id).get();
     }
-
+    public List<User> getAllUsers() {
+        return userRepository.findAll(); // assumes you have UserRepository
+    }
 }
