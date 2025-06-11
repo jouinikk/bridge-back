@@ -1,7 +1,9 @@
 package com.example.cars.entities;
 
 public enum Role {
-    SWIMMER,
+
+    COACH,
     ADMIN,
-    COACH
+    SWIMMER
+
 }

@@ -2,8 +2,10 @@ package com.example.cars.restcontrollers;
 
 import com.example.cars.dto.SeanceDTO;
 import com.example.cars.entities.Seance;
+import com.example.cars.entities.LigneEau;
 import com.example.cars.mappers.SeanceMapper;
 import com.example.cars.services.SeanceService;
+import com.example.cars.services.ILigneEauService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,24 +21,32 @@ public class SeanceController {
     
     private final SeanceService seanceService;
     private final SeanceMapper seanceMapper;
+    private final ILigneEauService ligneEauService;
     
     @PostMapping
     public ResponseEntity<?> createSeance(@RequestBody Seance seance) {
         try {
             // Validate required associations
-            if (seance.getLigneEau() == null) {
+            if (seance.getLigneEau() == null || seance.getLigneEau().getId() == null) {
                 return ResponseEntity.badRequest()
                     .body("Une ligne d'eau est requise");
             }
 
-            // Ensure piscine reference is properly set
-            if (seance.getLigneEau().getPiscine() == null) {
+            // Fetch complete LigneEau information
+            LigneEau completeLigneEau = ligneEauService.getLigneEauById(seance.getLigneEau().getId());
+            if (completeLigneEau == null) {
+                return ResponseEntity.badRequest()
+                    .body("La ligne d'eau spécifiée n'existe pas");
+            }
+            
+            if (completeLigneEau.getPiscine() == null) {
                 return ResponseEntity.badRequest()
                     .body("La piscine associée à la ligne d'eau est requise");
             }
 
-            // Set the piscine from ligneEau to ensure consistency
-            seance.setPiscine(seance.getLigneEau().getPiscine());
+            // Set the complete LigneEau and Piscine information
+            seance.setLigneEau(completeLigneEau);
+            seance.setPiscine(completeLigneEau.getPiscine());
 
             // Debug logging
             System.out.println("Creating seance with details:");
@@ -141,14 +151,16 @@ public class SeanceController {
         List<Seance> seances = seanceService.getSeancesByLigneEauAndDateRange(ligneEauId, debut, fin);
         return ResponseEntity.ok(seanceMapper.toDTOList(seances));
     }
-    
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateSeance(@PathVariable Long id, @RequestBody Seance seance) {
+      @PutMapping("/{id}")
+    public ResponseEntity<?> updateSeance(@PathVariable Long id, @RequestBody SeanceDTO seanceDto) {
         try {
-            if (!id.equals(seance.getId())) {
+            if (!id.equals(seanceDto.getId())) {
                 return ResponseEntity.badRequest()
                     .body("L'ID de la séance ne correspond pas");
             }
+            
+            // Convert DTO to entity
+            Seance seance = seanceMapper.toEntity(seanceDto);
             
             // Validate required associations
             if (seance.getLigneEau() == null) {
@@ -163,7 +175,17 @@ public class SeanceController {
 
             // Set the piscine from ligneEau to ensure consistency
             seance.setPiscine(seance.getLigneEau().getPiscine());
+              // Check required relationships
+            if (seance.getCoach() == null) {
+                return ResponseEntity.badRequest()
+                    .body("Un coach est requis");
+            }
             
+            if (seance.getGroupe() == null) {
+                return ResponseEntity.badRequest()
+                    .body("Un groupe est requis");
+            }
+
             // Check coach availability (pass the seance id to exclude it from conflict check)
             boolean isCoachAvailable = seanceService.isCoachAvailable(
                 seance.getCoach().getId(), 

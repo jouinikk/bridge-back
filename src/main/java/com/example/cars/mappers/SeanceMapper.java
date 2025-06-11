@@ -2,6 +2,10 @@ package com.example.cars.mappers;
 
 import com.example.cars.dto.SeanceDTO;
 import com.example.cars.entities.Seance;
+import com.example.cars.entities.LigneEau;
+import com.example.cars.services.ILigneEauService;
+import com.example.cars.services.ICoachService;
+import com.example.cars.services.IGroupeService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -9,6 +13,17 @@ import java.util.stream.Collectors;
 
 @Component
 public class SeanceMapper {
+
+    private final ILigneEauService ligneEauService;
+    private final ICoachService coachService;
+    private final IGroupeService groupeService;
+
+    public SeanceMapper(ILigneEauService ligneEauService, ICoachService coachService, 
+                       IGroupeService groupeService) {
+        this.ligneEauService = ligneEauService;
+        this.coachService = coachService;
+        this.groupeService = groupeService;
+    }
 
     /**
      * Convert a Seance entity to a SeanceDTO
@@ -61,5 +76,48 @@ public class SeanceMapper {
         return seances.stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Convert a SeanceDTO to a Seance entity
+     */
+    public Seance toEntity(SeanceDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+
+        Seance seance = new Seance();
+        seance.setId(dto.getId());
+        seance.setTitre(dto.getTitre());
+        seance.setDescription(dto.getDescription());
+        seance.setDateDebut(dto.getDateDebut());
+        seance.setDateFin(dto.getDateFin());
+        seance.setObjectifs(dto.getObjectifs());
+        seance.setTypeEntrainement(dto.getTypeEntrainement());
+        seance.setNombreMaxParticipants(dto.getNombreMaxParticipants());
+        seance.setNiveau(dto.getNiveau());
+        seance.setEstDisponible(dto.isEstDisponible());
+        seance.setStatut(dto.getStatut());
+
+        // Set the LigneEau with complete information
+        if (dto.getLigneEauId() != null) {
+            LigneEau ligneEau = ligneEauService.getLigneEauById(dto.getLigneEauId());
+            seance.setLigneEau(ligneEau);
+            if (ligneEau != null) {
+                seance.setPiscine(ligneEau.getPiscine());
+            }
+        }
+
+        // Set the Coach
+        if (dto.getCoachId() != null) {
+            seance.setCoach(coachService.getCoachById(dto.getCoachId()));
+        }
+
+        // Set the Groupe
+        if (dto.getGroupeId() != null) {
+            seance.setGroupe(groupeService.getGroupeById(dto.getGroupeId()));
+        }
+
+        return seance;
     }
 }
