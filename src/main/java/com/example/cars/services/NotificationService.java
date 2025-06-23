@@ -28,6 +28,7 @@ public class NotificationService {
     public List<Notification> getNotificationsForUser(User user) {
         return repo.findByUserIdOrderByCreatedAtDesc(user);
     }
+    @Transactional
     public List<Notification> sendNotificationToUsers(String title, String message, NotificationType type, boolean sendEmail, boolean sendSms, List<User> users) {
         List<Notification> notifications = new ArrayList<>();
 
@@ -41,8 +42,9 @@ public class NotificationService {
             notif.setSentBySms(sendSms);
             notif.setStatus(NotificationStatus.UNREAD);
             notif.setCreatedAt(LocalDateTime.now());
-
+            System.out.println("Saving notification for user " + user.getId() + ", title=" + title);
             Notification saved = repo.save(notif);
+            System.out.println("Notification saved with ID = " + saved.getId());
             notifications.add(saved);
 
             if (sendEmail && user.getEmail() != null) {

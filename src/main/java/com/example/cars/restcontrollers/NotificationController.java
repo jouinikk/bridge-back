@@ -56,10 +56,19 @@ public class NotificationController {
 
     @PostMapping
     public List<Notification> sendNotification(@RequestBody SendNotificationRequest request) {
-        List<User> users = request.getUserIds().stream()
-                .map(id -> userRepository.findById(id)
-                        .orElseThrow(() -> new RuntimeException("User not found with ID: " + id)))
-                .collect(Collectors.toList());
+        List<User> users;
+
+        if (request.getUserIds() == null || request.getUserIds().isEmpty()) {
+            // Send to all users
+            users = userRepository.findAll();
+        } else {
+            // Send to selected users
+            users = request.getUserIds().stream()
+                    .map(id -> userRepository.findById(id)
+                            .orElseThrow(() -> new RuntimeException("User not found with ID: " + id)))
+                    .collect(Collectors.toList());
+        }
+
         return service.sendNotificationToUsers(
                 request.getTitle(),
                 request.getMessage(),

@@ -10,6 +10,7 @@ import com.example.cars.services.NotificationService;
 import com.example.cars.services.UserInfoService;
 import com.example.cars.services.UserService;
 import com.example.cars.services.WebSocketSender;
+import jakarta.transaction.Transactional;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -36,11 +37,14 @@ public class CompetitionChangeDetector {
         this.userService = userService;
         this.webSocketSender = webSocketSender;
     }
-
     @Scheduled(fixedRate = 60000)
     public void detectChangesInCompetitions() {
         List<Competition> competitions = competitionRepository.findAll();
         List<User> users = userService.getAllUsers();
+        System.out.println("Found " + users.size() + " users.");
+        for (User user : users) {
+            System.out.println("User: " + user.getId() + ", email: " + user.getEmail());
+        }
 
         for (Competition comp : competitions) {
             boolean notify = false;
@@ -49,7 +53,7 @@ public class CompetitionChangeDetector {
 
             if (!comp.isCreatedNotificationSent()) {
                 title = "Nouvelle compétition ajoutée";
-                notificationService.sendNotificationToUsers(title, msg, NotificationType.COMPETITION, true, true, users);
+                notificationService.sendNotificationToUsers(title, msg, NotificationType.COMPETITION, true, false, users);
                 webSocketSender.sendToAll(new WebSocketNotification(title, msg, NotificationType.COMPETITION));
                 comp.setCreatedNotificationSent(true);
                 notify = true;
