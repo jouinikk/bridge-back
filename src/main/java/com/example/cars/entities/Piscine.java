@@ -1,0 +1,40 @@
+package com.example.cars.entities;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.util.List;
+
+@Entity
+@Getter
+@Setter
+@ToString // Exclude complex objects from toString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Piscine {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    private String nom;
+    private String adresse;
+    private String ville;
+    private String codePostal;
+    private String telephone;
+    private String email;
+    
+    private int nombreLignesEau; // Number of swimming lanes
+    
+    // Geolocation data for map integration
+    private double latitude;
+    private double longitude;
+    
+    @JsonIgnoreProperties({"piscine", "seances"})
+    @OneToMany(mappedBy = "piscine")
+    @ToString.Exclude
+    private List<LigneEau> lignesEau;
+}

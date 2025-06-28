@@ -1,6 +1,6 @@
 package com.example.cars.config;
 
-import com.example.cars.config.JwtAuthentificationFilter; // Update package if needed
+import com.example.cars.config.JwtAuthentificationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +34,8 @@ public class SecurityConfig {
                     return config;
                 }))
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // Or restrict specific endpoints
+                        .requestMatchers("**").permitAll()  // From abdou-new
+                        .anyRequest().authenticated()       // From abdou-new
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -43,5 +44,4 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
 }

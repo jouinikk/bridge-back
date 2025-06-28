@@ -15,26 +15,23 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Nageur {
+public class Coach {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     private String nom;
     private String prenom;
-    private int age;
-    private String sexe;
     private String email;
     private String telephone;
-    private String niveau; // Beginner, Intermediate, Advanced, etc.
-
-    @OneToMany(mappedBy = "nageur")
-    private List<EvaluationSante> evaluations;
-
-    @OneToMany(mappedBy = "nageur")
-    private List<Reservation> reservations;
-
-    @JsonIgnoreProperties("nageurs")
-    @ManyToMany(mappedBy = "nageurs")
+    private String specialite; // Butterfly, freestyle, etc.
+    private int anneeExperience;
+    
+    @JsonIgnoreProperties({"coach", "nageurs", "seances"})
+    @OneToMany(mappedBy = "coach")
     private List<Groupe> groupes;
+    
+    @JsonIgnoreProperties({"coach", "groupe"})
+    @OneToMany(mappedBy = "coach")
+    private List<Seance> seances;
 }
