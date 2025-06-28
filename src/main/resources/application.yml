@@ -14,3 +14,15 @@ spring:
       hibernate:
         format_sql: true
     database: mysql
+# Python Scraper Configuration
+python:
+  path: "venv/bin/python" # or "/path/to/venv/bin/python" if using virtualenv
+  scripts:
+    competitions: "import_competitions.py"
+    results: "import_requests.py"
+
+# Scheduling Configuration
+scheduling:
+  competitions:
+    cron: "0 0 3 * * *" # Daily at 3 AM
+    enabled: true
