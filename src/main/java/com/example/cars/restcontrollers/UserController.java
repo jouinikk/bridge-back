@@ -4,35 +4,16 @@ import com.example.cars.dto.PasswordUpdateRequest;
 import com.example.cars.entities.User;
 import com.example.cars.services.UserService;
 import lombok.RequiredArgsConstructor;
-
-
-import java.util.List;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import com.example.cars.entities.Nageur;
-import com.example.cars.entities.User;
-import com.example.cars.services.UserService;
-
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-
 
 @RestController
 @RequestMapping("api/v1/users")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200/")
 public class UserController {
-
-
-    private final UserService service ;
-
-
 
     private final UserService userService;
 
@@ -43,7 +24,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User updatedUser) {
-       User existingUser = userService.getUserById(id);
+        User existingUser = userService.getUserById(id);
 
         if (existingUser == null) {
             return ResponseEntity.notFound().build();
@@ -56,7 +37,6 @@ public class UserController {
         // ... other fields
 
         User savedUser = userService.updateUser(existingUser);
-
         return ResponseEntity.ok(savedUser);
     }
 
@@ -65,7 +45,12 @@ public class UserController {
             @PathVariable int userId,
             @RequestBody PasswordUpdateRequest request
     ) {
-        return userService.updatePassword(userId, request.getCurrentPassword(), request.getNewPassword(), request.getConfirmPassword());
+        return userService.updatePassword(
+                userId,
+                request.getCurrentPassword(),
+                request.getNewPassword(),
+                request.getConfirmPassword()
+        );
     }
 
     @GetMapping("/{id}")
@@ -73,8 +58,7 @@ public class UserController {
         return ResponseEntity.ok(this.userService.getUserById(id));
     }
 
-
-        @PutMapping("toggleLock/{id}")
+    @PutMapping("toggleLock/{id}")
     public ResponseEntity<User> toggleLock(@PathVariable int id) {
         return ResponseEntity.ok(this.userService.toggleLock(id));
     }

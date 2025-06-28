@@ -14,24 +14,24 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public List<User> users(){
+    public List<User> users() {
         return userRepository.findAll();
     }
 
     public User getUserById(int id) throws NoSuchElementException {
-        return  userRepository.findById(id).get();
+        return userRepository.findById(id).get();
     }
 
-    public User updateUser(User user){
+    public User updateUser(User user) {
         return userRepository.save(user);
     }
 
-    public ResponseEntity<?> updatePassword(int userId, String currentPassword, String newPassword, String confirmPassword) {
+    public ResponseEntity<?> updatePassword(int userId, String currentPassword,
+                                            String newPassword, String confirmPassword) {
         Optional<User> optionalUser = userRepository.findById(userId);
 
         if (optionalUser.isEmpty()) {
@@ -42,27 +42,31 @@ public class UserService {
 
         // 1. Check if current password matches
         if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Current password is incorrect");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Current password is incorrect");
         }
 
         // 2. Check if new and confirm password match
         if (!newPassword.equals(confirmPassword)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("New passwords do not match");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("New passwords do not match");
         }
 
         // 3. Encode new password and save
-        String encodedNewPassword = passwordEncoder.encode(newPassword);
-        user.setPassword(encodedNewPassword);
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
 
         return ResponseEntity.ok("Password updated successfully");
     }
 
-
     public User toggleLock(int userId) {
-        User optionalUser = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId).get();
+        user.setLocked(!user.isLocked());
+        return userRepository.save(user);
+    }
 
-        optionalUser.setLocked(!optionalUser.isLocked());
-        return userRepository.save(optionalUser);
+    // Added from maissa-notif branch (if needed)
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }
