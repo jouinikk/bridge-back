@@ -2,6 +2,7 @@ package com.example.cars.services;
 
 import com.example.cars.entities.Piscine;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IPiscineService {
@@ -12,4 +13,5 @@ public interface IPiscineService {
     void deletePiscine(Long id);
     List<Piscine> getPiscinesByVille(String ville);
     List<Piscine> searchPiscines(String keyword);
+    List<Piscine> getAvailablePiscines(LocalDateTime dateDebut, LocalDateTime dateFin);
 }

@@ -1,12 +1,18 @@
 package com.example.cars.services;
 
+import com.example.cars.entities.Disponibilite;
 import com.example.cars.entities.Piscine;
 import com.example.cars.Repositories.LigneEauRepository;
+import com.example.cars.Repositories.DisponibiliteRepository;
 import com.example.cars.Repositories.PiscineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -14,30 +20,21 @@ public class PiscineService implements IPiscineService {
 
     private final PiscineRepository piscineRepository;
     private final LigneEauRepository ligneEauRepository;
-
-
-    // @Override
-    // public Piscine addPiscine(Piscine piscine) {
-    //     return piscineRepository.save(piscine);
-    // }
+    private final DisponibiliteRepository disponibiliteRepository;
 
     @Override
     public Piscine addPiscine(Piscine piscine) {
         if (piscine.getLignesEau() != null) {
-            // Save the piscine first to get an ID
             Piscine savedPiscine = piscineRepository.save(piscine);
-
-            // Then save all lignesEau with the proper relationship
             piscine.getLignesEau().forEach(ligne -> {
                 ligne.setPiscine(savedPiscine);
                 ligneEauRepository.save(ligne);
             });
-
             return piscineRepository.findById(savedPiscine.getId()).orElse(savedPiscine);
         }
         return piscineRepository.save(piscine);
     }
-    
+
     @Override
     public List<Piscine> getAllPiscines() {
         return piscineRepository.findAll();
@@ -66,5 +63,36 @@ public class PiscineService implements IPiscineService {
     @Override
     public List<Piscine> searchPiscines(String keyword) {
         return piscineRepository.findByNomContaining(keyword);
+    }
+
+    @Override
+    public List<Piscine> getAvailablePiscines(LocalDateTime dateDebut, LocalDateTime dateFin) {
+        DayOfWeek dayOfWeek = dateDebut.getDayOfWeek();
+        LocalTime timeDebut = dateDebut.toLocalTime();
+        LocalTime timeFin = dateFin.toLocalTime();
+
+        List<Piscine> allPiscines = piscineRepository.findAll();
+
+        return allPiscines.stream()
+                .filter(piscine -> isPiscineAvailable(piscine, dayOfWeek, timeDebut, timeFin))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isPiscineAvailable(Piscine piscine, DayOfWeek dayOfWeek,
+                                       LocalTime timeDebut, LocalTime timeFin) {
+        List<Disponibilite> disponibilites = disponibiliteRepository
+                .findByPiscineIdAndJourSemaine(piscine.getId(), dayOfWeek);
+
+        if (disponibilites.isEmpty()) {
+            return false;
+        }
+
+        return disponibilites.stream().anyMatch(disp ->
+                disp.isEstDisponible() &&
+                        disp.getHeureOuverture() != null &&
+                        disp.getHeureFermeture() != null &&
+                        !timeDebut.isBefore(disp.getHeureOuverture()) &&
+                        !timeFin.isAfter(disp.getHeureFermeture())
+        );
     }
 }

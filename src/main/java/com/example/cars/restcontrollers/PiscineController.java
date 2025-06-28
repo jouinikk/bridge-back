@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @RestController
@@ -45,6 +47,25 @@ public class PiscineController {
     public ResponseEntity<Piscine> updatePiscine(@PathVariable Long id, @RequestBody Piscine piscine) {
         piscine.setId(id);
         return ResponseEntity.ok(piscineService.updatePiscine(piscine));
+    }
+
+    @GetMapping("/available")
+    public ResponseEntity<List<Piscine>> getAvailablePiscines(
+            @RequestParam String dateDebut,
+            @RequestParam String dateFin) {
+        try {
+            // Parse ISO 8601 format with timezone (e.g., "2025-06-23T08:00:00.000Z")
+            LocalDateTime startDateTime = ZonedDateTime.parse(dateDebut).toLocalDateTime();
+            LocalDateTime endDateTime = ZonedDateTime.parse(dateFin).toLocalDateTime();
+            
+            return ResponseEntity.ok(piscineService.getAvailablePiscines(startDateTime, endDateTime));
+        } catch (Exception e) {
+            // Log the error for debugging
+            System.err.println("Error parsing dates: " + e.getMessage());
+            System.err.println("dateDebut: " + dateDebut);
+            System.err.println("dateFin: " + dateFin);
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @DeleteMapping("/{id}")
