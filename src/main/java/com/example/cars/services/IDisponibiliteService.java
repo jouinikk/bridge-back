@@ -6,6 +6,9 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+
 public interface IDisponibiliteService {
     Disponibilite addDisponibilite(Disponibilite disponibilite);
     List<Disponibilite> getAllDisponibilites();

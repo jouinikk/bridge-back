@@ -1,6 +1,8 @@
 package com.example.cars.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -16,6 +18,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@JsonInclude(JsonInclude.Include.NON_NULL)  // Add this line
 public class Disponibilite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
