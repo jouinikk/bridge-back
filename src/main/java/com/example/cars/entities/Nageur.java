@@ -1,5 +1,6 @@
 package com.example.cars.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,6 +23,11 @@ public class Nageur {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    private String nom;
+    private String prenom;
+    private String email;
+    private String telephone;
+    private String niveau;
     // Correspond à firstName dans TS
     String firstName;
 
@@ -35,7 +41,7 @@ public class Nageur {
 
     String phone;
 
-    String email;
+
 
     String category;
 
@@ -53,4 +59,9 @@ public class Nageur {
     @OneToMany(mappedBy = "nageur")
     @JsonManagedReference
     private List<Reservation> reservations;
+
+
+    @JsonIgnoreProperties("nageurs")
+    @ManyToMany(mappedBy = "nageurs")
+    private List<Groupe> groupes;
 }
