@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Entity
 @Getter
@@ -22,8 +22,8 @@ public class Seance {
     
     private String titre;
     private String description;
-    private LocalDateTime dateDebut;
-    private LocalDateTime dateFin;
+    private ZonedDateTime dateDebut;
+    private ZonedDateTime dateFin;
     private String objectifs;
     private String typeEntrainement; // Endurance, sprint, technique, etc.
     

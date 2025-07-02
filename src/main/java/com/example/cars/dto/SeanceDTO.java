@@ -4,7 +4,7 @@ import com.example.cars.entities.Seance.StatutSeance;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 /**
  * Data Transfer Object for simplified Seance information
@@ -18,8 +18,8 @@ public class SeanceDTO {
     private Long id;
     private String titre;
     private String description;
-    private LocalDateTime dateDebut;
-    private LocalDateTime dateFin;
+    private ZonedDateTime dateDebut;
+    private ZonedDateTime dateFin;
     private String objectifs;
     private String typeEntrainement;
     

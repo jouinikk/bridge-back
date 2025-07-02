@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @RestController
@@ -137,8 +137,8 @@ public class SeanceController {
     @GetMapping("/coach/{coachId}/date-range")
     public ResponseEntity<List<SeanceDTO>> getSeancesByCoachAndDateRange(
             @PathVariable Long coachId,
-            @RequestParam LocalDateTime debut,
-            @RequestParam LocalDateTime fin) {
+            @RequestParam ZonedDateTime debut,
+            @RequestParam ZonedDateTime fin) {
         List<Seance> seances = seanceService.getSeancesByCoachAndDateRange(coachId, debut, fin);
         return ResponseEntity.ok(seanceMapper.toDTOList(seances));
     }
@@ -146,8 +146,8 @@ public class SeanceController {
     @GetMapping("/ligne-eau/{ligneEauId}/date-range")
     public ResponseEntity<List<SeanceDTO>> getSeancesByLigneEauAndDateRange(
             @PathVariable Long ligneEauId,
-            @RequestParam LocalDateTime debut,
-            @RequestParam LocalDateTime fin) {
+            @RequestParam ZonedDateTime debut,
+            @RequestParam ZonedDateTime fin) {
         List<Seance> seances = seanceService.getSeancesByLigneEauAndDateRange(ligneEauId, debut, fin);
         return ResponseEntity.ok(seanceMapper.toDTOList(seances));
     }

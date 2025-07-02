@@ -11,4 +11,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        jdbc:
+          '[time_zone]': Europe/Paris  # GMT+1 timezone
     database: mysql
+  jackson:
+    time-zone: Europe/Paris  # Ensure JSON serialization uses local timezone

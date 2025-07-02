@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @RestController
@@ -36,6 +38,53 @@ public class LigneEauController {
             @PathVariable Long piscineId,
             @PathVariable String numero) {
         return ResponseEntity.ok(ligneEauService.getLigneEauByPiscineAndNumero(piscineId, numero));
+    }
+
+    @GetMapping("/available")
+    public ResponseEntity<List<LigneEau>> getAvailableLignesEau(
+            @RequestParam String dateDebut,
+            @RequestParam String dateFin) {
+        try {
+            // Parse ISO 8601 format with timezone (e.g., "2025-06-23T08:00:00.000+01:00")
+            ZonedDateTime startZonedDateTime = ZonedDateTime.parse(dateDebut);
+            ZonedDateTime endZonedDateTime = ZonedDateTime.parse(dateFin);
+            
+            // Convert to Europe/Paris timezone to match database storage
+            LocalDateTime startDateTime = startZonedDateTime.withZoneSameInstant(java.time.ZoneId.of("Europe/Paris")).toLocalDateTime();
+            LocalDateTime endDateTime = endZonedDateTime.withZoneSameInstant(java.time.ZoneId.of("Europe/Paris")).toLocalDateTime();
+            
+            return ResponseEntity.ok(ligneEauService.getAvailableLignesEau(startDateTime, endDateTime));
+        } catch (Exception e) {
+            // Log the error for debugging
+            System.err.println("Error parsing dates: " + e.getMessage());
+            System.err.println("dateDebut: " + dateDebut);
+            System.err.println("dateFin: " + dateFin);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/piscine/{piscineId}/available")
+    public ResponseEntity<List<LigneEau>> getAvailableLignesEauByPiscine(
+            @PathVariable Long piscineId,
+            @RequestParam String dateDebut,
+            @RequestParam String dateFin) {
+        try {
+            // Parse ISO 8601 format with timezone (e.g., "2025-06-23T08:00:00.000+01:00")
+            ZonedDateTime startZonedDateTime = ZonedDateTime.parse(dateDebut);
+            ZonedDateTime endZonedDateTime = ZonedDateTime.parse(dateFin);
+            
+            // Convert to Europe/Paris timezone to match database storage
+            LocalDateTime startDateTime = startZonedDateTime.withZoneSameInstant(java.time.ZoneId.of("Europe/Paris")).toLocalDateTime();
+            LocalDateTime endDateTime = endZonedDateTime.withZoneSameInstant(java.time.ZoneId.of("Europe/Paris")).toLocalDateTime();
+            
+            return ResponseEntity.ok(ligneEauService.getAvailableLignesEauByPiscine(piscineId, startDateTime, endDateTime));
+        } catch (Exception e) {
+            // Log the error for debugging
+            System.err.println("Error parsing dates: " + e.getMessage());
+            System.err.println("dateDebut: " + dateDebut);
+            System.err.println("dateFin: " + dateFin);
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping

@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -36,8 +36,8 @@ public class SeanceService implements ISeanceService {
         seance.setPiscine(seance.getLigneEau().getPiscine());
         
         // Validate session times
-        LocalDateTime dateDebut = seance.getDateDebut();
-        LocalDateTime dateFin = seance.getDateFin();
+        ZonedDateTime dateDebut = seance.getDateDebut();
+        ZonedDateTime dateFin = seance.getDateFin();
         
         // Validate pool hours
         if (!isWithinPoolHours(seance.getLigneEau().getId(), dateDebut, dateFin)) {
@@ -70,8 +70,8 @@ public class SeanceService implements ISeanceService {
         seance.setPiscine(seance.getLigneEau().getPiscine());
         
         // Validate session times
-        LocalDateTime dateDebut = seance.getDateDebut();
-        LocalDateTime dateFin = seance.getDateFin();
+        ZonedDateTime dateDebut = seance.getDateDebut();
+        ZonedDateTime dateFin = seance.getDateFin();
         
         // Validate pool hours
         if (!isWithinPoolHours(seance.getLigneEau().getId(), dateDebut, dateFin)) {
@@ -108,17 +108,17 @@ public class SeanceService implements ISeanceService {
     }
     
     @Override
-    public List<Seance> getSeancesByCoachAndDateRange(Long coachId, LocalDateTime debut, LocalDateTime fin) {
+    public List<Seance> getSeancesByCoachAndDateRange(Long coachId, ZonedDateTime debut, ZonedDateTime fin) {
         return seanceRepository.findByCoachIdAndDateDebutBetween(coachId, debut, fin);
     }
     
     @Override
-    public List<Seance> getSeancesByLigneEauAndDateRange(Long ligneEauId, LocalDateTime debut, LocalDateTime fin) {
+    public List<Seance> getSeancesByLigneEauAndDateRange(Long ligneEauId, ZonedDateTime debut, ZonedDateTime fin) {
         return seanceRepository.findByLigneEauIdAndDateDebutBetween(ligneEauId, debut, fin);
     }
 
     @Override
-    public boolean hasConflictingSeances(Long ligneEauId, LocalDateTime dateDebut, LocalDateTime dateFin, Long excludeId) {
+    public boolean hasConflictingSeances(Long ligneEauId, ZonedDateTime dateDebut, ZonedDateTime dateFin, Long excludeId) {
         List<Seance> conflictingSeances = seanceRepository.findConflictingSessionsForLigneEau(
             ligneEauId, 
             dateDebut, 
@@ -129,7 +129,7 @@ public class SeanceService implements ISeanceService {
     }
     
     @Override
-    public boolean isCoachAvailable(Long coachId, LocalDateTime dateDebut, LocalDateTime dateFin, Long excludeId) {
+    public boolean isCoachAvailable(Long coachId, ZonedDateTime dateDebut, ZonedDateTime dateFin, Long excludeId) {
         List<Seance> conflictingSeances = seanceRepository.findConflictingSessionsForCoach(
             coachId, 
             dateDebut, 
@@ -140,7 +140,7 @@ public class SeanceService implements ISeanceService {
     }
 
     @Override
-    public boolean isWithinPoolHours(Long ligneEauId, LocalDateTime dateDebut, LocalDateTime dateFin) {
+    public boolean isWithinPoolHours(Long ligneEauId, ZonedDateTime dateDebut, ZonedDateTime dateFin) {
         // Get the day of week for the seance
         DayOfWeek jourSemaine = dateDebut.getDayOfWeek();
         

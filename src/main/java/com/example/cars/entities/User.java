@@ -33,6 +33,7 @@ public class User implements UserDetails {
     private Role role ;
 
     @ColumnDefault("false")
+    @Builder.Default
     private boolean locked = false;
 
 
