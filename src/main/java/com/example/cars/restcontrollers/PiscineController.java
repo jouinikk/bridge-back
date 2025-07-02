@@ -72,7 +72,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/piscines")
 @RequiredArgsConstructor
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class PiscineController {
     
     private final IPiscineService piscineService;
