@@ -31,7 +31,7 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role ;
-
+    private String phone;
     @ColumnDefault("false")
     @Builder.Default
     private boolean locked = false;
@@ -79,5 +79,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 }
