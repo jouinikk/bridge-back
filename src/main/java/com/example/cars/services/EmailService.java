@@ -7,6 +7,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Service
 public class EmailService {
@@ -32,6 +33,16 @@ public class EmailService {
             mailSender.send(message);
         } catch (MessagingException e) {
             e.printStackTrace(); // Or use a logger
+        }
+    }
+    public void sendHtmlEmailBatch(List<String> recipients, String subject, String htmlContent) {
+        for (String to : recipients) {
+            try {
+                sendHtmlEmail(to, subject, htmlContent);
+                System.out.println("✅ Email sent to: " + to);
+            } catch (Exception e) {
+                System.err.println("❌ Failed to send email to: " + to + " - " + e.getMessage());
+            }
         }
     }
 }
