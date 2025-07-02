@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/newsletter")
+@RequestMapping("/api/newsletters")
 public class NewsletterController {
     private final MonthlyNewsletterService monthlyNewsletterService;
 
@@ -29,7 +30,5 @@ public class NewsletterController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
-
 }
 
