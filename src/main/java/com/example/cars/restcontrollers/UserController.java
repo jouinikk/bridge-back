@@ -63,6 +63,6 @@ public class UserController {
 
     @PostMapping("/addUser")
     public ResponseEntity<Void> addUser(@RequestBody User user) {
-        return service.addUser(user)!= null ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+        return userService.addUser(user)!= null ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 }
