@@ -43,6 +43,7 @@ public class Nageur {
 
     // Correspond à sessionsPerWeek dans TS
     int sessionsPerWeek;
+    Boolean   actif;
 
     // Correspond à registrationDate dans TS
     LocalDate registrationDate;

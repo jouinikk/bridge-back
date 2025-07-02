@@ -35,6 +35,7 @@ public class SeanceBienEtre {
     private String emailInstructeur;
 
     private String niveau;
+    Boolean   actif;
 
     @Enumerated(EnumType.STRING)
     private TypeSeance type;
