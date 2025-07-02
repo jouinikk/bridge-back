@@ -8,6 +8,7 @@ import com.example.cars.entities.MonthlyNewsletter;
 import com.example.cars.entities.Resultat;
 import com.example.cars.entities.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -131,6 +133,23 @@ public class MonthlyNewsletterService {
         }
 
         System.out.println("✅ Test newsletter sent to all users.");
+        MonthlyNewsletter testNewsletter = MonthlyNewsletter.builder()
+                .month(now)
+                .sentAt(LocalDateTime.now())
+                .contentHtml(htmlContent)
+                .tipOfTheMonth(tip)
+                .competitionsCount(competitions.size())
+                .resultsCount(results.size())
+                .build();
+
+        newsletterRepository.save(testNewsletter);
+    }
+    public List<MonthlyNewsletter> getAllNewsletters() {
+        return newsletterRepository.findAll(Sort.by(Sort.Direction.DESC, "month"));
+    }
+
+    public Optional<MonthlyNewsletter> getNewsletterById(Long id) {
+        return newsletterRepository.findById(id);
     }
 
 }
