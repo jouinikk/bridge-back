@@ -1,5 +1,6 @@
 package com.example.cars.restcontrollers;
 
+import com.example.cars.dto.GroupNameDTO;
 import com.example.cars.entities.Groupe;
 import com.example.cars.services.IGroupeService;
 import lombok.RequiredArgsConstructor;
@@ -58,5 +59,12 @@ public class GroupeController {
     public ResponseEntity<Void> removeNageurFromGroupe(@PathVariable Long groupeId, @PathVariable Long nageurId) {
         groupeService.removeNageurFromGroupe(groupeId, nageurId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/names")
+    public List<GroupNameDTO> getAllGroupeNames() {
+        List<GroupNameDTO> groupes = groupeService.getGroupeNames();
+        System.out.println("Groups: " + groupes);
+        return groupes;
     }
 }

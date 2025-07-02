@@ -13,4 +13,8 @@ public class RegisterRequest {
     private String name;
     private String email;
     private String password;
+    private String telephone;
+    private String specialite; // Butterfly, freestyle, etc.
+    private int anneeExperience;
+    private String niveau;
 }

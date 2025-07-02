@@ -43,6 +43,9 @@ public class JwtService {
             extraClaims.put("name",user.getName());
             extraClaims.put("id",user.getId());
             extraClaims.put("role",user.getRole());
+            extraClaims.put("specialite",user.getSpecialite());
+            extraClaims.put("anneeexperience",user.getAnneeExperience());
+            extraClaims.put("telephone",user.getTelephone());
         }
 
     return Jwts.builder()
@@ -61,6 +64,11 @@ public class JwtService {
     public boolean isTokenValid(String token,UserDetails userDetails){
         final String userName = getUserEmail(token);
         return userName.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    }
+
+    public boolean isTokenValid(String token){
+        final String userName = getUserEmail(token);
+        return !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {

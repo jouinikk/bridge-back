@@ -2,6 +2,8 @@ package com.example.cars.services;
 
 import com.example.cars.entities.Coach;
 import java.time.LocalDateTime;
+import com.example.cars.entities.User;
+
 import java.util.List;
 
 public interface ICoachService {
@@ -13,4 +15,6 @@ public interface ICoachService {
     void deleteCoach(Long id);
     List<Coach> getCoachWithGroupes(Long id);
     List<Coach> getAvailableCoaches(LocalDateTime dateDebut, LocalDateTime dateFin);
+
+    void addUserAsCoach(User user);
 }

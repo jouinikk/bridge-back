@@ -1,6 +1,7 @@
 package com.example.cars.services;
 
 import com.example.cars.Repositories.UserRepository;
+import com.example.cars.entities.Role;
 import com.example.cars.entities.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,8 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CoachService coachService;
+    private final NageurService nageurService;
 
     public List<User> users(){
         return userRepository.findAll();
@@ -64,5 +67,21 @@ public class UserService {
 
         optionalUser.setLocked(!optionalUser.isLocked());
         return userRepository.save(optionalUser);
+    }
+
+    public User addUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+       User nuser = userRepository.save(user);
+
+        if(user.getRole().equals(Role.COACH)) {
+            coachService.addUserAsCoach(nuser);
+        }else if(user.getRole().equals((Role.SWIMMER))){
+            nageurService.addUserAsSwimmer(nuser);
+        }
+        return new User();
+    }
+
+    public static void main(String[] args) {
+
     }
 }

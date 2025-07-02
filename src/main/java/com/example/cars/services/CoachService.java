@@ -4,6 +4,7 @@ import com.example.cars.entities.Coach;
 import com.example.cars.entities.Seance;
 import com.example.cars.Repositories.CoachRepository;
 import com.example.cars.Repositories.SeanceRepository;
+import com.example.cars.entities.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -78,5 +79,19 @@ public class CoachService implements ICoachService {
         
         // Coach is available only if no conflicting sessions
         return conflictingSeances.isEmpty();
+    }
+
+    @Override
+    public void addUserAsCoach(User user) {
+        Coach coach = new Coach();
+        coach.setId(Long.parseLong(String.valueOf(user.getId())));
+        coach.setSpecialite(user.getSpecialite());
+        coach.setNom(user.getName());
+        coach.setPrenom(user.getPrenom());
+        coach.setAnneeExperience(user.getAnneeExperience());
+        coach.setEmail(user.getEmail());
+        coach.setTelephone(user.getTelephone());
+
+        coachRepository.save(coach);
     }
 }
