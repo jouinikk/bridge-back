@@ -78,4 +78,10 @@ public class UserController {
     public ResponseEntity<User> toggleLock(@PathVariable int id) {
         return ResponseEntity.ok(this.userService.toggleLock(id));
     }
+
+
+    @PostMapping("/addUser")
+    public ResponseEntity<Void> addUser(@RequestBody User user) {
+        return service.addUser(user)!= null ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
 }

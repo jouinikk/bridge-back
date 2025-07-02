@@ -1,6 +1,8 @@
 package com.example.cars.services;
 
 import com.example.cars.entities.Coach;
+import com.example.cars.entities.User;
+
 import java.util.List;
 
 public interface ICoachService {
@@ -11,4 +13,6 @@ public interface ICoachService {
     Coach updateCoach(Coach coach);
     void deleteCoach(Long id);
     List<Coach> getCoachWithGroupes(Long id);
+
+    void addUserAsCoach(User user);
 }

@@ -1,5 +1,6 @@
 package com.example.cars.services;
 
+import com.example.cars.dto.GroupNameDTO;
 import com.example.cars.entities.Groupe;
 import java.util.List;
 
@@ -12,4 +13,5 @@ public interface IGroupeService {
     void deleteGroupe(Long id);
     void addNageurToGroupe(Long groupeId, Long nageurId);
     void removeNageurFromGroupe(Long groupeId, Long nageurId);
+    List<GroupNameDTO> getGroupeNames();
 }

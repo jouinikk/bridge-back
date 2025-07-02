@@ -1,5 +1,6 @@
 package com.example.cars.services;
 
+import com.example.cars.dto.GroupNameDTO;
 import com.example.cars.entities.Groupe;
 import com.example.cars.entities.Nageur;
 import com.example.cars.Repositories.GroupeRepository;
@@ -7,6 +8,7 @@ import com.example.cars.Repositories.NageurRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -65,4 +67,14 @@ public class GroupeService implements IGroupeService {
             groupeRepository.save(groupe);
         }
     }
+
+    public List<GroupNameDTO> getGroupeNames() {
+        List<Groupe> groupes = groupeRepository.findAll();
+        List<GroupNameDTO> dtos = new ArrayList<>();
+        for (Groupe groupe : groupes) {
+            dtos.add(new GroupNameDTO(groupe.getNom(),groupe.getId()));
+        }
+        return dtos;
+    }
+
 }

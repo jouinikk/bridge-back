@@ -35,6 +35,14 @@ public class User implements UserDetails {
     @ColumnDefault("false")
     private boolean locked = false;
 
+    //coach attributes
+    private String telephone;
+    private String specialite; // Butterfly, freestyle, etc.
+    private int anneeExperience;
+    private String prenom;
+
+    //swimmer attributes
+    private String niveau;
 
     @Override
     @JsonIgnore

@@ -17,7 +17,6 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Coach {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     private String nom;

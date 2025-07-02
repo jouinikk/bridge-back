@@ -2,6 +2,7 @@ package com.example.cars.services;
 
 import com.example.cars.entities.Coach;
 import com.example.cars.Repositories.CoachRepository;
+import com.example.cars.entities.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -48,5 +49,19 @@ public class CoachService implements ICoachService {
     public List<Coach> getCoachWithGroupes(Long id) {
         Coach coach = coachRepository.findById(id).orElse(null);
         return coach != null ? Collections.singletonList(coach) : Collections.emptyList();
+    }
+
+    @Override
+    public void addUserAsCoach(User user) {
+        Coach coach = new Coach();
+        coach.setId(Long.parseLong(String.valueOf(user.getId())));
+        coach.setSpecialite(user.getSpecialite());
+        coach.setNom(user.getName());
+        coach.setPrenom(user.getPrenom());
+        coach.setAnneeExperience(user.getAnneeExperience());
+        coach.setEmail(user.getEmail());
+        coach.setTelephone(user.getTelephone());
+
+        coachRepository.save(coach);
     }
 }
