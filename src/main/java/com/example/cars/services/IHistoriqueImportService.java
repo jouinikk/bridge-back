@@ -12,6 +12,6 @@ public interface IHistoriqueImportService {
     List<HistoriqueImport> getAllImports();
     Optional<HistoriqueImport> getHistoriqueImportById(Long id);
     List<HistoriqueImport> getImportsByType(String type);
-    HistoriqueImport edit(HistoriqueImport historiqueImport);
+    HistoriqueImport editHistoriqueImport(Long id, HistoriqueImport updatedHistoriqueImport);
     void deleteHistoriqueImportById(Long id);
 }
