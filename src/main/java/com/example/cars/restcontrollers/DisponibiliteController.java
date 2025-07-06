@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/disponibilites")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class DisponibiliteController {
 
     @Autowired
@@ -78,5 +79,11 @@ public class DisponibiliteController {
             @PathVariable Long ligneEauId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime) {
         return disponibiliteService.isLigneEauDisponible(ligneEauId, dateTime);
+    }
+
+    // Bulk creation endpoint
+    @PostMapping("/bulk")
+    public List<Disponibilite> createMultipleDisponibilites(@RequestBody List<Disponibilite> disponibilites) {
+        return disponibiliteService.createMultipleDisponibilites(disponibilites);
     }
 }

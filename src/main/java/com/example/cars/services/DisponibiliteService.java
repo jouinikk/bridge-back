@@ -87,4 +87,9 @@ public class DisponibiliteService implements IDisponibiliteService {
             !time.isAfter(disp.getHeureFermeture()) // Time must be before closing
         );
     }
+    
+    @Override
+    public List<Disponibilite> createMultipleDisponibilites(List<Disponibilite> disponibilites) {
+        return disponibiliteRepository.saveAll(disponibilites);
+    }
 }
