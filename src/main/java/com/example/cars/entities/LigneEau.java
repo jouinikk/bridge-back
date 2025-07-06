@@ -37,4 +37,9 @@ public class LigneEau {
     @JsonIgnoreProperties({ "ligneEau", "coach", "groupe", "piscine" })
     @ToString.Exclude
     private List<Seance> seances;
+    
+    @OneToMany(mappedBy = "ligneEau", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({"ligneEau", "piscine"})
+    @ToString.Exclude
+    private List<Disponibilite> disponibilites;
 }

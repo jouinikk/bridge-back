@@ -46,6 +46,12 @@ public class Piscine {
     @Builder.Default // Ensures the list is initialized when using builder
     private List<LigneEau> lignesEau = new ArrayList<>();
     
+    @JsonIgnoreProperties({"piscine", "ligneEau"})
+    @OneToMany(mappedBy = "piscine", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    @Builder.Default
+    private List<Disponibilite> disponibilites = new ArrayList<>();
+    
     @ManyToOne
     @JoinColumn(name = "centre_id")
     private Centre centre;
