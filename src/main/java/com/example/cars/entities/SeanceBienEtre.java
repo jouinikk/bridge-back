@@ -8,25 +8,40 @@ import java.util.List;
 
 
 @Entity
+@Builder
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SeanceBienEtre {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
 
-    private Date date;
+    Date date;
 
-    private int capacite;
+    int capacite;
+
+    Integer duree;
+
+    int placesDisponibles;
 
     @Enumerated(EnumType.STRING)
-    private TypeSeance type;
+    TypeSeance type;
+
+    String instructeur;
+
+    String emailInstructeur;
+
+    String niveau;
+
+    boolean actif;
+    @Column(name = "reminder_sent")
+    private boolean reminderSent = false;
+
     @OneToMany(mappedBy = "seanceBienEtre")
-    private List<Reservation> reservations;
+    List<Reservation> reservations;
 }
+

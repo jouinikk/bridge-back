@@ -12,9 +12,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SeanceBienEtreService implements ISeanceBienEtreService {
     private final SeanceBienEtreRepository seanceRepository;
-
+    private final EmailService emailService;
     public SeanceBienEtre addSeance(SeanceBienEtre seance) {
-        return seanceRepository.save(seance);
+        SeanceBienEtre saved = seanceRepository.save(seance);
+
+        // ✅ Notify instructor by email
+        emailService.sendInstructorSeanceEmail(saved);
+
+        return saved;
     }
 
     public List<SeanceBienEtre> getAllSeances() {
