@@ -26,6 +26,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+    private String prenom;
     @Column(unique = true)
     private String email;
     private String password;
@@ -39,12 +40,11 @@ public class User implements UserDetails {
     //coach attributes
     private String telephone;
     private String specialite; // Butterfly, freestyle, etc.
-    private int anneeExperience;
-    private String prenom;
+
 
     //swimmer attributes
     private String niveau;
-
+    private int anneeExperience;
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,6 +1,8 @@
 package com.example.cars.services;
 
+import com.example.cars.Repositories.CoachRepository;
 import com.example.cars.dto.GroupNameDTO;
+import com.example.cars.entities.Coach;
 import com.example.cars.entities.Groupe;
 import com.example.cars.entities.Nageur;
 import com.example.cars.Repositories.GroupeRepository;
@@ -17,6 +19,7 @@ public class GroupeService implements IGroupeService {
     
     private final GroupeRepository groupeRepository;
     private final NageurRepository nageurRepository;
+    private final CoachRepository coachRepository;
     
     @Override
     public List<Groupe> getAllGroupes() {
@@ -75,6 +78,22 @@ public class GroupeService implements IGroupeService {
             dtos.add(new GroupNameDTO(groupe.getNom(),groupe.getId()));
         }
         return dtos;
+    }
+
+    public void assignCoachToGroupe(Long groupeId, Long coachId) {
+        Groupe groupe = groupeRepository.findById(groupeId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found"));
+        Coach coach = coachRepository.findById(coachId)
+                .orElseThrow(() -> new IllegalArgumentException("Coach not found"));
+        groupe.setCoach(coach);
+        groupeRepository.save(groupe);
+    }
+
+    public void removeCoachFromGroupe(Long groupeId) {
+        Groupe groupe = groupeRepository.findById(groupeId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found"));
+        groupe.setCoach(null);
+        groupeRepository.save(groupe);
     }
 
 }

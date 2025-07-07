@@ -13,7 +13,8 @@ import java.util.List;
 public class NageurService implements INageurService {
     
     private final NageurRepository nageurRepository;
-    
+    private final GroupeService groupeService;
+
     @Override
     public List<Nageur> getAllNageurs() {
         return nageurRepository.findAll();
@@ -57,7 +58,20 @@ public class NageurService implements INageurService {
         nageur.setEmail(user.getEmail());
         nageur.setTelephone(user.getTelephone());
         nageur.setId(Long.parseLong(String.valueOf(user.getId())));
-        nageurRepository.save(nageur);
+                nageurRepository.save(nageur);
         return user;
+    }
+
+    public void updateUserAsSwimmer(User user) {
+        Nageur swimmer = nageurRepository.findById(Long.parseLong(String.valueOf(user.getId())))
+                .orElseThrow(() -> new IllegalArgumentException("Swimmer with ID " + user.getId() + " not found"));
+
+        swimmer.setNiveau(user.getNiveau());
+        swimmer.setNom(user.getName());
+        swimmer.setPrenom(user.getPrenom());
+        swimmer.setEmail(user.getEmail());
+        swimmer.setTelephone(user.getTelephone());
+
+        nageurRepository.save(swimmer);
     }
 }

@@ -14,4 +14,8 @@ public interface IGroupeService {
     void addNageurToGroupe(Long groupeId, Long nageurId);
     void removeNageurFromGroupe(Long groupeId, Long nageurId);
     List<GroupNameDTO> getGroupeNames();
+
+    void assignCoachToGroupe(Long id, Long coachId);
+
+    void removeCoachFromGroupe(Long id);
 }

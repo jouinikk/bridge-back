@@ -23,6 +23,7 @@ public class CoachController {
         return ResponseEntity.ok(coachService.getAllCoaches());
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<Coach> getCoachById(@PathVariable Long id) {
         return ResponseEntity.ok(coachService.getCoachById(id));
