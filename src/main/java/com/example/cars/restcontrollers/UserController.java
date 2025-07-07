@@ -54,44 +54,47 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
 
-        if(updatedUser.getRole()!=existingUser.getRole()){
-            if (updatedUser.getRole().equals("COACH")){
+        if(updatedUser.getRole()!=existingUser.getRole()) {
+            if (updatedUser.getRole().equals("COACH")) {
                 coachService.addUserAsCoach(updatedUser);
-            }else if(updatedUser.getRole().equals("SWIMMER")){
+            } else if (updatedUser.getRole().equals("SWIMMER")) {
                 nageurService.addUserAsSwimmer(updatedUser);
-        }else{
-            // Handle role-specific fields
-            if ("COACH".equals(updatedUser.getRole())) {
-                existingUser.setSpecialite(updatedUser.getSpecialite());
-                existingUser.setAnneeExperience(updatedUser.getAnneeExperience());
-                existingUser.setNiveau(null); // Clear Swimmer-specific field
-            } else if ("SWIMMER".equals(updatedUser.getRole())) {
-                existingUser.setNiveau(updatedUser.getNiveau());
-                existingUser.setSpecialite(null); // Clear Coach-specific fields
-                existingUser.setAnneeExperience(0);
-            } else if ("ADMIN".equals(updatedUser.getRole())) {
-                existingUser.setSpecialite(null);
-                existingUser.setAnneeExperience(0);
-                existingUser.setNiveau(null);
             }
+        } else {
+                // Handle role-specific fields
+                if ("COACH".equals(updatedUser.getRole())) {
+                    existingUser.setSpecialite(updatedUser.getSpecialite());
+                    existingUser.setAnneeExperience(updatedUser.getAnneeExperience());
+                    existingUser.setNiveau(null); // Clear Swimmer-specific field
+                } else if ("SWIMMER".equals(updatedUser.getRole())) {
+                    existingUser.setNiveau(updatedUser.getNiveau());
+                    existingUser.setSpecialite(null); // Clear Coach-specific fields
+                    existingUser.setAnneeExperience(0);
+                } else if ("ADMIN".equals(updatedUser.getRole())) {
+                    existingUser.setSpecialite(null);
+                    existingUser.setAnneeExperience(0);
+                    existingUser.setNiveau(null);
+                }
         }
 
-        // Update common fields
-        existingUser.setId(id); // Ensure ID consistency
-        existingUser.setName(updatedUser.getName());
-        existingUser.setPrenom(updatedUser.getPrenom());
-        existingUser.setEmail(updatedUser.getEmail());
-        existingUser.setRole(updatedUser.getRole());
-        existingUser.setLocked(updatedUser.isLocked());
-        existingUser.setTelephone(updatedUser.getTelephone());
+            // Update common fields
+            existingUser.setId(id); // Ensure ID consistency
+            existingUser.setName(updatedUser.getName());
+            existingUser.setPrenom(updatedUser.getPrenom());
+            existingUser.setEmail(updatedUser.getEmail());
+            existingUser.setRole(updatedUser.getRole());
+            existingUser.setLocked(updatedUser.isLocked());
+            existingUser.setTelephone(updatedUser.getTelephone());
 
-        // Password is not updated in this endpoint
-        // existingUser.setPassword(updatedUser.getPassword()); // Uncomment if password update is allowed
 
-        User savedUser = userService.updateUser(existingUser);
+            // Password is not updated in this endpoint
+            // existingUser.setPassword(updatedUser.getPassword()); // Uncomment if password update is allowed
+
+            User savedUser = userService.updateUser(existingUser);
 
         return ResponseEntity.ok(savedUser);
     }
+
 
     @PutMapping("/{userId}/update-password")
     public ResponseEntity<?> updatePassword(
