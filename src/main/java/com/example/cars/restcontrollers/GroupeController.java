@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/groupes")
 @RequiredArgsConstructor
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:4200/")
 public class GroupeController {
     
     private final IGroupeService groupeService;
@@ -26,6 +26,8 @@ public class GroupeController {
     public ResponseEntity<Groupe> getGroupeById(@PathVariable Long id) {
         return ResponseEntity.ok(groupeService.getGroupeById(id));
     }
+
+
 
     @GetMapping("/coach/{coachId}")
     public ResponseEntity<List<Groupe>> getGroupesByCoachId(@PathVariable Long coachId) {
@@ -61,10 +63,24 @@ public class GroupeController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/{id}/coach/{coachId}")
+    public ResponseEntity<Void> assignCoachToGroupe(@PathVariable Long id, @PathVariable Long coachId) {
+        groupeService.assignCoachToGroupe(id, coachId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}/coach")
+    public ResponseEntity<Void> removeCoachFromGroupe(@PathVariable Long id) {
+        groupeService.removeCoachFromGroupe(id);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/names")
     public List<GroupNameDTO> getAllGroupeNames() {
         List<GroupNameDTO> groupes = groupeService.getGroupeNames();
         System.out.println("Groups: " + groupes);
         return groupes;
     }
+
+
 }

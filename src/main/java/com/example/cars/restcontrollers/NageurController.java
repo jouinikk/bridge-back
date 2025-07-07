@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/nageurs")
 @RequiredArgsConstructor
-@CrossOrigin("*")
+@CrossOrigin("http://localhost:4200/")
 public class NageurController {
     
     private final INageurService nageurService;

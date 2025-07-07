@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/coaches")
 @RequiredArgsConstructor
-@CrossOrigin("*")
+@CrossOrigin("http://localhost:4200/")
 public class CoachController {
     
     private final ICoachService coachService;
@@ -20,6 +20,7 @@ public class CoachController {
     public ResponseEntity<List<Coach>> getAllCoaches() {
         return ResponseEntity.ok(coachService.getAllCoaches());
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Coach> getCoachById(@PathVariable Long id) {

@@ -1,5 +1,6 @@
 package com.example.cars.restcontrollers;
 
+import com.example.cars.dto.AdddUserDTO;
 import com.example.cars.dto.PasswordUpdateRequest;
 import com.example.cars.entities.User;
 import com.example.cars.services.UserService;
@@ -43,17 +44,38 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User updatedUser) {
-       User existingUser = userService.getUserById(id);
+        User existingUser = userService.getUserById(id);
 
         if (existingUser == null) {
             return ResponseEntity.notFound().build();
         }
 
-        // Update fields manually (you can use a mapper if needed)
+        // Update common fields
+        existingUser.setId(id); // Ensure ID consistency
         existingUser.setName(updatedUser.getName());
+        existingUser.setPrenom(updatedUser.getPrenom());
         existingUser.setEmail(updatedUser.getEmail());
         existingUser.setRole(updatedUser.getRole());
-        // ... other fields
+        existingUser.setLocked(updatedUser.isLocked());
+        existingUser.setTelephone(updatedUser.getTelephone());
+
+        // Handle role-specific fields
+        if ("COACH".equals(updatedUser.getRole())) {
+            existingUser.setSpecialite(updatedUser.getSpecialite());
+            existingUser.setAnneeExperience(updatedUser.getAnneeExperience());
+            existingUser.setNiveau(null); // Clear Swimmer-specific field
+        } else if ("SWIMMER".equals(updatedUser.getRole())) {
+            existingUser.setNiveau(updatedUser.getNiveau());
+            existingUser.setSpecialite(null); // Clear Coach-specific fields
+            existingUser.setAnneeExperience(0);
+        } else if ("ADMIN".equals(updatedUser.getRole())) {
+            existingUser.setSpecialite(null);
+            existingUser.setAnneeExperience(0);
+            existingUser.setNiveau(null);
+        }
+
+        // Password is not updated in this endpoint
+        // existingUser.setPassword(updatedUser.getPassword()); // Uncomment if password update is allowed
 
         User savedUser = userService.updateUser(existingUser);
 
@@ -84,4 +106,5 @@ public class UserController {
     public ResponseEntity<Void> addUser(@RequestBody User user) {
         return service.addUser(user)!= null ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
+
 }

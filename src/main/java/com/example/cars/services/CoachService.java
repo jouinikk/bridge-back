@@ -64,4 +64,20 @@ public class CoachService implements ICoachService {
 
         coachRepository.save(coach);
     }
+
+    public void updateUserAsCoach(User user) {
+        Coach coach = coachRepository.findById(Long.parseLong(String.valueOf(user.getId())))
+                .orElseThrow(() -> new IllegalArgumentException("Coach with ID " + user.getId() + " not found"));
+
+        coach.setSpecialite(user.getSpecialite());
+        coach.setNom(user.getName());
+        coach.setPrenom(user.getPrenom());
+        coach.setAnneeExperience(user.getAnneeExperience());
+        coach.setEmail(user.getEmail());
+        coach.setTelephone(user.getTelephone());
+
+        coachRepository.save(coach);
+    }
+
+
 }
