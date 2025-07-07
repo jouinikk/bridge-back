@@ -47,7 +47,7 @@ public class AuthenticationService {
 
         // Set the JWT as a secure, HttpOnly cookie
         ResponseCookie cookie = ResponseCookie.from("jwt", jwtToken)
-
+                .httpOnly(false) // Set to false to make it accessible via JavaScript for debugging
                 .secure(false) // ⚠️ Set to true in production (with HTTPS)
                 .path("/")
                 .maxAge(24 * 60 * 60)

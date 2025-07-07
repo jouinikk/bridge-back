@@ -6,6 +6,9 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+
 public interface IDisponibiliteService {
     Disponibilite addDisponibilite(Disponibilite disponibilite);
     List<Disponibilite> getAllDisponibilites();
@@ -20,4 +23,6 @@ public interface IDisponibiliteService {
     List<Disponibilite> getDisponibilitesByLigneEauAndJour(Long ligneEauId, DayOfWeek jourSemaine);
     
     boolean isLigneEauDisponible(Long ligneEauId, LocalDateTime dateTime);
+    
+    List<Disponibilite> createMultipleDisponibilites(List<Disponibilite> disponibilites);
 }

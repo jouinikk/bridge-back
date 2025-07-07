@@ -2,7 +2,7 @@ package com.example.cars.services;
 
 import com.example.cars.entities.Seance;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public interface ISeanceService {
@@ -23,13 +23,13 @@ public interface ISeanceService {
     
     List<Seance> getSeancesByLigneEauId(Long ligneEauId);
     
-    List<Seance> getSeancesByCoachAndDateRange(Long coachId, LocalDateTime debut, LocalDateTime fin);
+    List<Seance> getSeancesByCoachAndDateRange(Long coachId, ZonedDateTime debut, ZonedDateTime fin);
     
-    List<Seance> getSeancesByLigneEauAndDateRange(Long ligneEauId, LocalDateTime debut, LocalDateTime fin);
+    List<Seance> getSeancesByLigneEauAndDateRange(Long ligneEauId, ZonedDateTime debut, ZonedDateTime fin);
     
-    boolean hasConflictingSeances(Long ligneEauId, LocalDateTime dateDebut, LocalDateTime dateFin, Long excludeId);
+    boolean hasConflictingSeances(Long ligneEauId, ZonedDateTime dateDebut, ZonedDateTime dateFin, Long excludeId);
     
-    boolean isCoachAvailable(Long coachId, LocalDateTime dateDebut, LocalDateTime dateFin, Long excludeId);
+    boolean isCoachAvailable(Long coachId, ZonedDateTime dateDebut, ZonedDateTime dateFin, Long excludeId);
     
-    boolean isWithinPoolHours(Long ligneEauId, LocalDateTime dateDebut, LocalDateTime dateFin);
+    boolean isWithinPoolHours(Long ligneEauId, ZonedDateTime dateDebut, ZonedDateTime dateFin);
 }
