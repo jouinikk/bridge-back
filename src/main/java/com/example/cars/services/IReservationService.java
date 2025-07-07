@@ -8,4 +8,6 @@ public interface IReservationService {
     List<Reservation> getAllReservations();
     Reservation getReservationById(Long id);
     void deleteReservation(Long id);
+    List<Reservation> getReservationsBySwimmerId(Long swimmerId);
+
 }

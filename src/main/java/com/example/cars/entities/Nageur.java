@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -18,15 +19,23 @@ import java.util.List;
 public class Nageur {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    private String nom;
-    private String prenom;
-    private String email;
-    private String telephone;
-    private String niveau; // Beginner, Intermediate, Advanced, etc.
-    
+
+    String firstName;
+    String lastName;
+    Integer age;
+    String gender;
+    String phone;
+    String email;
+    String category;
+    String level;
+    Integer sessionsPerWeek;
+    @Temporal(TemporalType.DATE)
+    Date registrationDate;
+    Boolean actif;
+
     @JsonIgnoreProperties("nageurs")
     @ManyToMany(mappedBy = "nageurs")
-    private List<Groupe> groupes;
+    List<Groupe> groupes;
 }

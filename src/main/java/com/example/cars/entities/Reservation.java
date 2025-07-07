@@ -1,4 +1,5 @@
 package com.example.cars.entities;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -23,8 +24,10 @@ public class Reservation {
     @JoinColumn(name = "nageur_id", referencedColumnName = "id")
     private Nageur nageur;
 
+
     @ManyToOne
     @JoinColumn(name = "seance_bien_etre_id", referencedColumnName = "id")
+    @JsonIgnore
     private SeanceBienEtre seanceBienEtre;
 
     private Date dateReservation;
