@@ -31,6 +31,12 @@ public class UserService {
     }
 
     public User updateUser(User user){
+        User nuser = userRepository.save(user);
+        if(user.getRole().equals(Role.COACH)) {
+            coachService.updateUserAsCoach(nuser);
+        } else if(user.getRole().equals(Role.SWIMMER)) {
+            nageurService.updateUserAsSwimmer(nuser);
+        }
         return userRepository.save(user);
     }
 
@@ -80,8 +86,6 @@ public class UserService {
         }
         return new User();
     }
-
-    public static void main(String[] args) {
-
     }
-}
+
+
