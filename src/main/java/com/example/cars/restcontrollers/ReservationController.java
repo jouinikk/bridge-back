@@ -1,4 +1,4 @@
-package com.example.cars.controllers;
+package com.example.cars.restcontrollers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
