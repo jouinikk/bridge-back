@@ -1,5 +1,6 @@
 package com.example.cars.entities;
 
+import com.example.cars.entities.Groupe;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -7,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
 import java.util.List;
-
 @Entity
 @Getter
 @Setter
@@ -22,17 +22,26 @@ public class Nageur {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    String firstName;
-    String lastName;
+    // Champs communs
+    String nom;
+    String prenom;
+    String email;
+    String phone;
+
+    // Champs supplémentaires
     Integer age;
     String gender;
-    String phone;
-    String email;
     String category;
     String level;
+    String firstName;
+    String lastName;
+
+    String niveau;
     Integer sessionsPerWeek;
+
     @Temporal(TemporalType.DATE)
     Date registrationDate;
+
     Boolean actif;
 
     @JsonIgnoreProperties("nageurs")
