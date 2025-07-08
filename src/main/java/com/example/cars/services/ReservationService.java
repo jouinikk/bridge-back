@@ -28,4 +28,8 @@ public class ReservationService implements IReservationService {
     public void deleteReservation(Long id) {
         reservationRepo.deleteById(id);
     }
+    public List<Reservation> getReservationsBySwimmerId(Long swimmerId) {
+        return reservationRepo.findBySwimmerId(swimmerId);
+    }
+
 }

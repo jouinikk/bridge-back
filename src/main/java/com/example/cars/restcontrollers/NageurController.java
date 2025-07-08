@@ -28,8 +28,8 @@ public class NageurController {
     }
 
     @GetMapping("/niveau/{niveau}")
-    public ResponseEntity<List<Nageur>> getNageursByNiveau(@PathVariable String niveau) {
-        return ResponseEntity.ok(nageurService.getNageursByNiveau(niveau));
+    public ResponseEntity<List<Nageur>> getNageursByLevel(@PathVariable String level) {
+        return ResponseEntity.ok(nageurService.getNageursByNiveau(level));
     }
 
     @GetMapping("/groupe/{groupeId}")
