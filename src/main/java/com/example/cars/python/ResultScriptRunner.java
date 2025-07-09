@@ -1,73 +1,43 @@
 package com.example.cars.python;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class ResultScriptRunner {
-    /**
-     * Executes a Python script in the system terminal/command prompt
-     * @param scriptPath Path to the Python script
-     * @param waitForCompletion If true, waits for script to complete before returning
-     * @return The script output if waitForCompletion is true, otherwise null
-     */
-    public static String runPythonScript(String scriptPath, boolean waitForCompletion) {
+    public static void main(String[] args) {
         try {
-            // Determine the operating system
-            String os = System.getProperty("os.name").toLowerCase();
+            // Load the resource as stream
+            InputStream scriptStream = CompetitionScriptRunner.class.getResourceAsStream("/importrequests1.py");
 
-            // Build the command to run Python script
-            String command = "python " + scriptPath;
-
-            // Prepare the process builder based on OS
-            ProcessBuilder processBuilder;
-            if (os.contains("win")) {
-                // For Windows
-                processBuilder = new ProcessBuilder("cmd.exe", "/c", command);
-            } else {
-                // For Linux/Mac
-                processBuilder = new ProcessBuilder("/bin/bash", "-c", command);
+            if (scriptStream == null) {
+                System.err.println("Script not found in resources!");
+                return;
             }
 
-            // Redirect error stream to output stream
-            processBuilder.redirectErrorStream(true);
+            // Copy to a temp file
+            File tempScript = File.createTempFile("importrequests1", ".py");
+            Files.copy(scriptStream, tempScript.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            tempScript.setExecutable(true);
 
-            // Start the process
-            Process process = processBuilder.start();
+            // Execute the script
+            ProcessBuilder pb = new ProcessBuilder("python", tempScript.getAbsolutePath());
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
 
-            if (waitForCompletion) {
-                // Read the output
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(process.getInputStream()));
-
-                StringBuilder output = new StringBuilder();
+            // Read output
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    output.append(line).append("\n");
+                    System.out.println(line);
                 }
-
-                // Wait for the process to complete
-                int exitCode = process.waitFor();
-                output.append("\nProcess exited with code: ").append(exitCode);
-
-                return output.toString();
-            } else {
-                // Don't wait, just return null
-                return null;
             }
 
-        } catch (IOException | InterruptedException e) {
+            int exitCode = process.waitFor();
+            System.out.println("Script exited with code: " + exitCode);
+
+        } catch (Exception e) {
             e.printStackTrace();
-            return "Error executing Python script: " + e.getMessage();
         }
-    }
-
-    public static void main(String[] args) {
-        // Example usage - running tes.py
-        String scriptPath = "C:\\Users\\LENOVO\\Desktop\\importrequests1.py";
-        System.out.println("Executing Python script: " + scriptPath);
-        String output = runPythonScript(scriptPath, true);
-
-        System.out.println("Script output:\n" + output);
     }
 }
