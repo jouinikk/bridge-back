@@ -83,5 +83,9 @@ public class GroupeController {
         return groupes;
     }
 
+    @GetMapping("/nageur/{nageurId}")
+    public ResponseEntity<List<Groupe>> getGroupesByNageurId(@PathVariable Long nageurId) {
+        return ResponseEntity.ok(groupeService.getGroupesByNageurId(nageurId));
+    }
 
 }

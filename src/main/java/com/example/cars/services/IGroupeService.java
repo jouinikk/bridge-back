@@ -8,6 +8,7 @@ public interface IGroupeService {
     List<Groupe> getAllGroupes();
     Groupe getGroupeById(Long id);
     List<Groupe> getGroupesByCoachId(Long coachId);
+    List<Groupe> getGroupesByNageurId(Long nageurId);
     Groupe addGroupe(Groupe groupe);
     Groupe updateGroupe(Groupe groupe);
     void deleteGroupe(Long id);

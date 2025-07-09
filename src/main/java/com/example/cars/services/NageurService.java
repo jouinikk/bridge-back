@@ -52,7 +52,7 @@ public class NageurService implements INageurService {
 
     public User addUserAsSwimmer(User user) {
         Nageur nageur = new Nageur();
-
+        nageur.setId(Long.parseLong(String.valueOf(user.getId()))); // Assurez-vous que l'ID est correct, sinon laissez le JPA le gérer
         // Correspondance des champs
         nageur.setLevel(user.getNiveau());             // si dans Nageur c'est 'level' (en anglais)
         nageur.setFirstName(user.getName());           // ou user.getPrenom(), à confirmer

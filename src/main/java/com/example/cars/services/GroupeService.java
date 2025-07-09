@@ -37,6 +37,11 @@ public class GroupeService implements IGroupeService {
     }
     
     @Override
+    public List<Groupe> getGroupesByNageurId(Long nageurId) {
+        return groupeRepository.findByNageursId(nageurId);
+    }
+    
+    @Override
     public Groupe addGroupe(Groupe groupe) {
         return groupeRepository.save(groupe);
     }

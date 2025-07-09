@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface GroupeRepository extends JpaRepository<Groupe, Long> {
     List<Groupe> findByCoachId(Long coachId);
+    List<Groupe> findByNageursId(Long nageurId);
 }
