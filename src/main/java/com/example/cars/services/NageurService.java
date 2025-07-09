@@ -62,6 +62,8 @@ public class NageurService implements INageurService {
 
         // Ne pas setter l'id manuellement si c'est auto-généré
         // nageur.setId(user.getId());  // à éviter si @GeneratedValue
+        nageur.setNom(user.getName());
+        nageur.setPrenom(user.getPrenom());
 
                 nageurRepository.save(nageur);
 

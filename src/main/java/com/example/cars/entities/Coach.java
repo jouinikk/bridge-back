@@ -28,9 +28,11 @@ public class Coach {
     
     @JsonIgnoreProperties({"coach", "nageurs", "seances"})
     @OneToMany(mappedBy = "coach")
+    @ToString.Exclude
     private List<Groupe> groupes;
     
     @JsonIgnoreProperties({"coach", "groupe"})
     @OneToMany(mappedBy = "coach")
+    @ToString.Exclude
     private List<Seance> seances;
 }

@@ -27,6 +27,7 @@ public class Groupe {
     @JsonIgnoreProperties({"groupes", "seances"})
     @ManyToOne
     @JoinColumn(name = "coach_id")
+    @ToString.Exclude
     private Coach coach;
     
     @JsonIgnoreProperties("groupes")
@@ -36,9 +37,11 @@ public class Groupe {
         joinColumns = @JoinColumn(name = "groupe_id"),
         inverseJoinColumns = @JoinColumn(name = "nageur_id")
     )
+    @ToString.Exclude
     private List<Nageur> nageurs;
     
     @JsonIgnoreProperties({"groupe", "coach"})
     @OneToMany(mappedBy = "groupe")
+    @ToString.Exclude
     private List<Seance> seances;
 }

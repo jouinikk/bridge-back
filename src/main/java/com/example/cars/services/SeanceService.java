@@ -18,6 +18,7 @@ public class SeanceService implements ISeanceService {
     
     private final SeanceRepository seanceRepository;
     private final DisponibiliteRepository disponibiliteRepository;
+    private final EmailService emailService;
     
     @Override
     public Seance addSeance(Seance seance) {
@@ -83,13 +84,33 @@ public class SeanceService implements ISeanceService {
             System.out.println("Time fin: " + dateFin.toLocalTime());
             throw new IllegalArgumentException("La séance est en dehors des heures d'ouverture de la piscine");
         }
+
+        Seance updated = seanceRepository.save(seance);
         
-        return seanceRepository.save(seance);
+        // Send email notification with error handling
+        try {
+            emailService.sendSeanceNotificationToCoachAndSwimmers(updated, "modifiée");
+        } catch (Exception e) {
+            System.err.println("Email notification failed for seance update - continuing with update");
+            // Log the error but don't fail the update operation
+        }
+        
+        return updated;
     }
     
     @Override
     public void deleteSeance(Long id) {
-        seanceRepository.deleteById(id);
+        Seance seance = seanceRepository.findById(id).orElse(null);
+        if (seance != null) {
+            try {
+                emailService.sendSeanceNotificationToCoachAndSwimmers(seance, "supprimée");
+            } catch (Exception e) {
+                System.err.println("Email notification failed for seance deletion - continuing with deletion");
+            }
+            seanceRepository.deleteById(id);
+        } else {
+            throw new IllegalArgumentException("Séance non trouvée avec l'ID: " + id);
+        }
     }
     
     @Override

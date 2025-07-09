@@ -1,5 +1,6 @@
 package com.example.cars.services;
 
+import com.example.cars.entities.Seance;
 import com.example.cars.entities.SeanceBienEtre;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -8,6 +9,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -90,6 +92,50 @@ public class EmailService {
     """;
 
         sendHtmlEmail(seance.getEmailInstructeur(), subject, content);
+    }
+    public void sendSeanceNotificationToCoachAndSwimmers(Seance seance, String action) {
+        System.out.println("Preparing to send email for seance: " + seance.getId());
+        System.out.println("Action: " + action);
+        List<String> recipients = new ArrayList<>();
+        // ✅ Add coach email
+        if (seance.getCoach() != null && seance.getCoach().getEmail() != null) {
+            recipients.add(seance.getCoach().getEmail());
+        }
+        System.out.println("ahaya" + seance.getCoach());
+        System.out.println("Coach: " + (seance.getCoach() != null ? seance.getCoach().getEmail() : "null"));
+        // ✅ Add swimmers from groupe
+        if (seance.getGroupe() != null) {
+            System.out.println("Groupe: " + seance.getGroupe().getNom());
+            System.out.println("Number of swimmers: " + (seance.getGroupe().getNageurs() != null ? seance.getGroupe().getNageurs().size() : 0));
+        } else {
+            System.out.println("Groupe is null");
+        }
+        // ✅ Compose the email
+        String subject = "Séance " + action + " : " + seance.getTitre();
+        String content = """
+    <div style='font-family:Arial,sans-serif; background-color:#f9f9f9; padding:20px'>
+        <div style='max-width:600px; margin:auto; background:white; padding:20px; border-radius:8px; border:1px solid #ddd'>
+            <h2 style='color:#2E86C1;'>Nouvelle séance """ + action + """
+            </h2>
+            <p><strong>Titre:</strong> """ + seance.getTitre() + """
+            </p>
+            <p><strong>Description:</strong> """ + seance.getDescription() + """
+            </p>
+            <p><strong>Date:</strong> """
+             + seance.getDateDebut() + """
+                          à """ + seance.getDateFin() + """
+            </p>
+            <p><strong>Coach:</strong> """ + seance.getCoach().getPrenom() + " " + seance.getCoach().getNom() + """
+            </p>
+            <p><strong>Groupe:</strong> """ + seance.getGroupe().getNom() + """
+            </p>
+            <p style='margin-top:20px;'>Merci de consulter votre planning.</p>
+            <hr style='margin-top:30px;'>
+            <p style='font-size:12px; color:#888;'>Ceci est un message automatique, veuillez ne pas répondre.</p>
+        </div>
+    </div>
+    """;
+        sendHtmlEmailBatch(recipients, subject, content);
     }
 
 }
