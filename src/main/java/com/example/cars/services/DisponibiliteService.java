@@ -2,6 +2,7 @@ package com.example.cars.services;
 
 import com.example.cars.entities.Disponibilite;
 import com.example.cars.Repositories.DisponibiliteRepository;
+import com.example.cars.Repositories.LigneEauRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,12 +10,14 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class DisponibiliteService implements IDisponibiliteService {
     
     private final DisponibiliteRepository disponibiliteRepository;
+    private final LigneEauRepository ligneEauRepository;
     
     @Override
     public Disponibilite addDisponibilite(Disponibilite disponibilite) {
@@ -86,5 +89,25 @@ public class DisponibiliteService implements IDisponibiliteService {
             !time.isBefore(disp.getHeureOuverture()) && // Time must be after opening
             !time.isAfter(disp.getHeureFermeture()) // Time must be before closing
         );
+    }
+    
+    @Override
+    public List<Disponibilite> createMultipleDisponibilites(List<Disponibilite> disponibilites) {
+        // Validate that all ligne_eau_id references exist before saving
+        List<Disponibilite> validDisponibilites = disponibilites.stream()
+            .filter(disp -> {
+                if (disp.getLigneEau() != null && disp.getLigneEau().getId() != null) {
+                    // Check if ligne_eau exists
+                    return ligneEauRepository.existsById(disp.getLigneEau().getId());
+                }
+                return false; // Skip if ligne_eau is null or id is null
+            })
+            .collect(Collectors.toList());
+            
+        if (validDisponibilites.size() != disponibilites.size()) {
+            System.err.println("Warning: Some disponibilites were skipped due to invalid ligne_eau references");
+        }
+        
+        return disponibiliteRepository.saveAll(validDisponibilites);
     }
 }

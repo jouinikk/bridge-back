@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface NageurRepository extends JpaRepository<Nageur, Long> {
-    List<Nageur> findByNiveau(String niveau);
+    List<Nageur> findByLevel(String level);
     List<Nageur> findByGroupesId(Long groupeId);
 }

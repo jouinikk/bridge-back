@@ -76,11 +76,14 @@ public class DisponibiliteServiceImpl implements IDisponibiliteService {
         LocalTime time = dateTime.toLocalTime();
         
         List<Disponibilite> disponibilites = disponibiliteRepository
-            .findByLigneEauIdAndJourSemaine(ligneEauId, dayOfWeek);
-            
-        return disponibilites.stream()
+            .findByLigneEauIdAndJourSemaine(ligneEauId, dayOfWeek);            return disponibilites.stream()
             .anyMatch(d -> d.isEstDisponible() && 
                          !time.isBefore(d.getHeureOuverture()) && 
                          !time.isAfter(d.getHeureFermeture()));
+    }
+    
+    @Override
+    public List<Disponibilite> createMultipleDisponibilites(List<Disponibilite> disponibilites) {
+        return disponibiliteRepository.saveAll(disponibilites);
     }
 }

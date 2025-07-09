@@ -144,22 +144,49 @@ public class SeanceService implements ISeanceService {
         // Get the day of week for the seance
         DayOfWeek jourSemaine = dateDebut.getDayOfWeek();
         
+        System.out.println("=== POOL HOURS VALIDATION ===");
+        System.out.println("Ligne Eau ID: " + ligneEauId);
+        System.out.println("Day of week: " + jourSemaine);
+        System.out.println("Original datetime: " + dateDebut + " to " + dateFin);
+        
         // Find disponibilite for this ligne d'eau and day
         List<Disponibilite> disponibilites = disponibiliteRepository.findByLigneEauIdAndJourSemaine(ligneEauId, jourSemaine);
         
+        System.out.println("Found " + disponibilites.size() + " disponibilites for this day and ligne eau");
+        
         if (disponibilites.isEmpty()) {
+            System.out.println("No disponibilite found - returning false");
             return false; // No disponibilite found for this day
         }
 
         Disponibilite dispo = disponibilites.get(0);
         
-        // Convert seance times to LocalTime for comparison
-        LocalTime seanceDebut = dateDebut.toLocalTime();
-        LocalTime seanceFin = dateFin.toLocalTime();
+        // Convert back to the original frontend timezone (GMT+1) to get the actual user time
+        // The server automatically converts to Europe/Paris (GMT+2), so we need to convert back
+        java.time.ZoneId frontendTimeZone = java.time.ZoneId.of("GMT+1");
+        LocalTime seanceDebut = dateDebut.withZoneSameInstant(frontendTimeZone).toLocalTime();
+        LocalTime seanceFin = dateFin.withZoneSameInstant(frontendTimeZone).toLocalTime();
+        
+        // Debug logging
+        System.out.println("Pool hours: " + dispo.getHeureOuverture() + " - " + dispo.getHeureFermeture());
+        System.out.println("Session times (direct from payload): " + seanceDebut + " - " + seanceFin);
+        System.out.println("Lane available (estDisponible): " + dispo.isEstDisponible());
+        
+        // Individual checks
+        boolean laneAvailable = dispo.isEstDisponible();
+        boolean startTimeOk = !seanceDebut.isBefore(dispo.getHeureOuverture());
+        boolean endTimeOk = !seanceFin.isAfter(dispo.getHeureFermeture());
+        
+        System.out.println("Lane available: " + laneAvailable);
+        System.out.println("Start time check (" + seanceDebut + " not before " + dispo.getHeureOuverture() + "): " + startTimeOk);
+        System.out.println("End time check (" + seanceFin + " not after " + dispo.getHeureFermeture() + "): " + endTimeOk);
         
         // Check if the seance is within pool hours and the lane is available
-        return dispo.isEstDisponible() &&
-               !seanceDebut.isBefore(dispo.getHeureOuverture()) &&
-               !seanceFin.isAfter(dispo.getHeureFermeture());
+        boolean isWithinHours = laneAvailable && startTimeOk && endTimeOk;
+        
+        System.out.println("Final result: " + isWithinHours);
+        System.out.println("=== END POOL HOURS VALIDATION ===");
+        
+        return isWithinHours;
     }
 }

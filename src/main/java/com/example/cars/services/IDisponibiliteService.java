@@ -23,4 +23,6 @@ public interface IDisponibiliteService {
     List<Disponibilite> getDisponibilitesByLigneEauAndJour(Long ligneEauId, DayOfWeek jourSemaine);
     
     boolean isLigneEauDisponible(Long ligneEauId, LocalDateTime dateTime);
+    
+    List<Disponibilite> createMultipleDisponibilites(List<Disponibilite> disponibilites);
 }
